@@ -1,0 +1,32 @@
+# Template file for overridable properties.
+# Please put only the minimal values in here; vast majority of properties should be automatic or depend on a property here.
+# Properties in this file will take effect if this file is:
+# - In user home directory, per project; e.g.: C:/Users/jgardner/ToughResources.properties
+# - In user home directory, global; e.g.: C:/Users/jgardner/build.properties
+# - In project directory, by user; e.g.: ~/Projects/ToughResources/jgardner.properties
+# - In project directory; e.g.: ~/Projects/ToughResources/build.properties
+
+# Default is to download dependencies as zip files from Jenkins.
+# Developer may choose to use local filesystem for speed/convenience. If this is set to true, local project files will be used.
+#is.development=true
+
+# Location of tomcat, for deploy targets.
+#tomcat.dir=/var/lib/tomcat7
+#tomcat.dir.bin=/usr/share/tomcat7/bin
+#tomcat.dir.lib=/usr/share/tomcat7/lib
+
+# Or, for a tarred tomcat:
+#tomcat.dir=/usr/local/apache-tomcat-7.0.29
+#tomcat.dir.bin=/usr/local/apache-tomcat-7.0.29/bin
+#tomcat.dir.lib=/usr/local/apache-tomcat-7.0.29/lib
+
+# Deployment host and authentication, for build and deploy.
+#deploy.ip=192.168.1.???
+#deploy.password=tomcat
+#deploy.username=tomcat
+
+# Directory containing different environment settings.
+#external.env.dir=<path-to-env-dir>
+
+# File defining the cloud(s) to be used.
+#external.cloud.config=<path-to-cloud-config>/cloud-config.xml

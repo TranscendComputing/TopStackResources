@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- ============================== -->
+	<import resource="commonservices-context.xml" />
+
+	<bean id="MonitorActionsQuery" class="com.msi.tough.monitor.Service">
+		<constructor-arg>
+			<map>
+				<entry key="AddHypervisorConfig">
+					<bean class="com.msi.tough.monitor.actions.AddHypervisorConfig" />
+				</entry>
+				<entry key="DeleteHypervisorConfig">
+					<bean class="com.msi.tough.monitor.actions.DeleteHypervisorConfig" />
+				</entry>
+				<entry key="ReloadHypervisorConfig">
+					<bean class="com.msi.tough.monitor.actions.ReloadHypervisorConfig" />
+				</entry>
+				<entry key="ViewHypervisorConfig">
+					<bean class="com.msi.tough.monitor.actions.ViewHypervisorConfig" />
+				</entry>
+				<entry key="CheckAlarms">
+					<bean class="com.msi.tough.monitor.actions.CheckAlarms" />
+				</entry>
+				<entry key="GatherAS">
+					<bean class="com.msi.tough.monitor.actions.GatherAS" />
+				</entry>
+				<entry key="GatherECache">
+					<bean class="com.msi.tough.monitor.actions.GatherECache" />
+				</entry>
+				<entry key="GatherLoadBalancer">
+					<bean class="com.msi.tough.monitor.actions.GatherLoadBalancer" />
+				</entry>
+				<entry key="GatherRDBMS">
+					<bean class="com.msi.tough.monitor.actions.GatherRDBMS" />
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

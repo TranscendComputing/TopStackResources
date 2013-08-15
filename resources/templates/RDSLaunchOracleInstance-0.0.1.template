@@ -1,0 +1,166 @@
+{
+  "ToughTemplateFormatVersion" : "2011-11-11",
+  "Description" : "Launch and configure Oracle RDS instance.",
+
+  "Parameters" : {
+   	"AccountId" : {	"Description" : "Account Id", "Type" : "String" },
+   	"DBInstanceId" : {	"Description" : "DB Instance Id", "Type" : "String" },
+   	"DBInstanceClass" : {	"Description" : "Instance Class", "Type" : "String" },
+   	"AvailabilityZone" : { "Description" : "Availability Zone",	"Type" : "String" },
+   	"MasterUser" : { "Description" : "Root User",	"Type" : "String" },
+   	"MasterPassword" : { "Description" : "Root Password",	"Type" : "String" },
+   	"DBSecurityGroups" : { "Description" : "Security Groups",	"Type" : "String" },
+   	"DBName" : { "Description" : "DB Name",	"Type" : "String" },
+   	"Engine" : { "Description" : "Engine" , "Type" : "String" },
+   	"AllocatedStorage" : { "Description" : "Allocated Storage" , "Type" : "String" }
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+    
+	"LaunchConfig": {
+		"Type": "TOUGH::LaunchConfiguration",
+		"Properties": {
+			"AccountId" : { "Ref" : "AccountId" },
+			"SecurityGroups" : { "Ref" : "DBSecurityGroups" },
+	        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" }, { "Ref" : "DBInstanceClass" } ]},
+	        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+  		  	"InstanceType" : { "Ref" : "DBInstanceClass" },
+	        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" } ]},
+	        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" } ]}
+		}
+	},
+	    
+  	"RDSInstance" : {
+  		"Type" : "TOUGH::EUCA::LaunchInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+  			"AvailabilityZone": { "Ref" : "AvailabilityZone" },
+  			"LaunchConfig" : { "Ref" : "LaunchConfig" }
+  		}
+  	},
+
+	"TrackRDSInstance" : {
+		"Type" : "TOUGH::EUCA::TrackInstance",
+		"Name" : "RDSInstance",
+		"Properties" : {
+	  		"Account" : { "Ref" : "Account" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] }
+		}
+	},
+	 
+  	"DBInstance" : {
+  		"Type" : "TOUGH::RDS::UpdateDBInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+			"Instance" : { "Ref" : "RDSInstance" }
+  		}
+  	},
+    
+    "CreateOracleVolume" : {
+  		"Type" : "TOUGH::EUCA::CreateVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"Size" : "10",
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"DeleteWithInstance" : "Y"
+  		}
+  	},
+  	
+  	"CreateStorageVolume" : {
+  		"Type" : "TOUGH::EUCA::CreateVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"Size" : { "Ref" : "AllocatedStorage" },
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"DeleteWithInstance" : "Y"
+  		}
+  	},
+  	
+  	"AttachOracleVolume" : {
+  		"Type" : "TOUGH::EUCA::AttachVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"VolumeId" : { "Fn::GetAtt" : [ "CreateOracleVolume", "VolumeId" ] },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"Device" : "/dev/sdb",
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" }
+  		}
+  	},
+  	
+  	"AttachStorageVolume" : {
+  		"Type" : "TOUGH::EUCA::AttachVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"VolumeId" : { "Fn::GetAtt" : [ "CreateStorageVolume", "VolumeId" ] },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"Device" : "/dev/sdc",
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" }
+  		}
+  	},
+  	
+  	"MountOracleVolume" : {
+  		"Type" : "TOUGH::INSTANCE::FormatVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"Device" : "/dev/sdb",
+			"FSType" : "ext3",
+			"MountPoint" : "/mnt/oracle",
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" }
+  		}
+  	},
+  	
+  	"MountStorageVolume" : {
+  		"Type" : "TOUGH::INSTANCE::FormatVolume",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+			"Device" : "/dev/sdc",
+			"FSType" : "ext3",
+			"MountPoint" : "/mnt/data",
+			"AvailabilityZone" : { "Ref" : "AvailabilityZone" }
+  		}
+  	},
+  	
+  		
+    "InstallOracle11g" : {
+      "Type" : "TOUGH::RDS::InstallOracle11g",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+  		"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+		"DBInstance" : { "Ref" : "DBInstance" },
+		"MasterUser" : { "Ref" : "MasterUser" },
+		"MasterPassword" : { "Ref" : "MasterPassword" },
+		"Engine" : { "Ref" : "Engine" },
+		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+		"DBName" : { "Ref" : "DBName" }
+      }
+    },
+
+  	"UpdateDBInstanceStatus" : {
+  		"Type" : "TOUGH::RDS::UpdateDBInstanceStatus",
+  		"Name" : "DBInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+			"Status" : "available"
+  		}
+  	}
+  },
+
+ "Outputs" : {
+ 	"PublicIP" : {
+ 		"Description" : "PublicIP address of the LoadBalancer",
+ 		"Value" : { "Fn::GetAtt" : [ "RDSInstance", "PublicIp" ] }
+ 	}
+ }
+}

@@ -1,0 +1,134 @@
+{
+	"ToughTemplateFormatVersion" : "2011-03-01",
+	"Description" : "Launch Hazelcast nodes to be used by SQS.",
+
+	"Parameters" : {
+		"AccountId" : {	
+			"Description" : "Account Id", 
+			"Type" : "String" 
+		},
+		"GroupName" : {
+      		"Description" : "Group name for the hazelcast cluster",
+      		"Type" : "String"
+    	},
+    	"GroupPW" : {
+      		"Description" : "Group password for the hazelcast cluster",
+      		"Type" : "String"
+    	},
+    	"AvailabilityZone" : {
+    		"Description" : "AvaialbilityZone in which an instance should be created",
+    		"Type" : "String"
+    	}
+	},
+  	
+  	"Resources" : {
+  		"Account": {
+      		"Type": "TOUGH::AccountBean",
+      		"Properties": {
+	  			"AccountId" : { "Ref" : "AccountId" }
+      		}
+    	},
+        
+  		"HazelcastLaunchConfig": {
+  			"Type": "TOUGH::LaunchConfiguration",
+  			"Properties": {
+  				"AccountId" : { "Ref" : "AccountId" },
+		        "SecurityGroups" : { "Fn::GetAtt" : [ "Account", "DefSecurityGroups" ] },
+		        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" }, "SQS" ]},
+		        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+		        "InstanceType" : { "Fn::Configuration" : [ "InstanceType", { "Ref" : "AvailabilityZone" }, "SQS" ]},
+		        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" }, "SQS" ]},
+		        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" }, "SQS" ]},
+  				"Setup" : {
+  					"RegisterAutoScalingInstance": {
+	  		  			"Type" : "TOUGH::AutoScaling::RegisterAutoScalingInstance",
+	  		  			"Properties" : {
+	  		  				"AccountId" : { "Ref" : "AccountId" },
+	  		  				"AutoScalingGroupName" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_ASGroup" ] },
+	  		  				"Instance" : { "Ref" : "TOUGH::Instance" }
+	  		  			}
+  					},
+
+  					"TrackInstance" : {
+  						"Type" : "TOUGH::EUCA::TrackInstance",
+  						"Name" : "TOUGH::Instance",
+  						"Properties" : {
+  		  					"Account" : { "Ref" : "Account" },
+  		    				"InstanceId" : { "Fn::GetAtt" : [ "TOUGH::Instance", "InstanceId" ] }
+  		  				}
+  		  			},
+  		  			
+  		  			"InstallHazelcast" : {
+  						"Type" : "TOUGH::SQS::InstallHazelcast",
+  						"Properties" : {
+  		  				    "Account" : { "Ref" : "Account" },
+  			        		"URL" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "HazelcastURL" ]},
+  			        		"TargetDirectory" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "HazelcastDirectory" ]},
+  		    				"Instance" : { "Ref" : "TOUGH::Instance" }
+  		         		}
+  					}
+  				},
+  				"Shutdown" : {
+  					"DeregisterAutoScalingInstance": {
+	  		  			"Type" : "TOUGH::AutoScaling::DeregisterAutoScalingInstance",
+	  		  			"Properties" : {
+	  		  				"AccountId" : { "Ref" : "AccountId" },
+	  		  				"AutoScalingGroupName" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_ASGroup" ] },
+	  		  				"Instance" : { "Ref" : "TOUGH::Instance" }
+	  		  			}
+  					},
+  					
+				    "DeleteInstances" : {
+			      		"Type" : "TOUGH::EUCA::DeleteInstances",
+				      	"Properties" : {
+	  		  				"Account" : { "Ref" : "Account" },
+	  		  				"Instance" : { "Fn::GetAtt" : [ "TOUGH::Instance", "InstanceId" ] }
+				      	}
+					}
+  				}
+			}
+  		},
+    
+  		"RegisterAutoScalingLaunchConfig" : {
+  			"Type" : "TOUGH::AutoScaling::RegisterAutoScalingLaunchConfig",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_LaunchConfig" ] },
+  				"LaunchConfig" : { "Ref" : "HazelcastLaunchConfig" }
+  			}
+  		},
+    
+  		"AutoScalingGroup" : {
+  			"Type" : "TOUGH::AutoScaling::AutoScalingGroup",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_ASGroup" ] },
+  				"AvailabilityZone": { "Ref" : "AvailabilityZone" },
+  				"CoolDown" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleCoolDown" ]},
+  				"MinSize" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleMinSize" ]},
+  				"MaxSize" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleMaxSize" ]},
+  				"AutoScalingLaunchConfigName" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_LaunchConfig" ] }
+  			}
+  		},
+    
+  		"AutoScalingTrigger" : {
+  			"Type" : "TOUGH::AutoScaling::AutoScalingTrigger",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_Trigger" ] },
+  				"AutoScalingGroupName" : { "Fn::Concat" : [ "SQS_", {"Ref" : "GroupName"}, "_ASGroup" ] },
+  				"BreachDuration" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleBreachDuration" ]},
+  				"Dimensions" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleDimensions" ]},
+  				"LowerBreachIncrement" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleLowerBreachIncrement" ]},
+  				"LowerBreachThreshold" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleLowerBreachThreshold" ]},
+  				"Measure" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleMeasure" ]},
+  				"NameSpace" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleNameSpace" ]},
+  				"Period" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScalePeriod" ]},
+  				"Statistic" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleStatistic" ]},
+  				"Unit" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleUnit" ]},
+  				"UpperBreachIncrement" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleUpperBreachIncrement" ]},
+  				"UpperThreshold" : { "Fn::FindInMap" : [ "AvailabilityZoneMap", { "Ref" : "AvailabilityZone" }, "AutoScaleUpperThreshold" ]}
+  			}
+  		}
+  	}
+}

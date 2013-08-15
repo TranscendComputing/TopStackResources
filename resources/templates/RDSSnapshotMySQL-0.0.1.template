@@ -1,0 +1,46 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+  "Description" : "Snapshot RDS instance.",
+
+  "Parameters" : {
+   	"AccountId" : {	"Description" : "Account Id", "Type" : "String" },
+   	"DBInstanceId" : {	"Description" : "DB Instance Id", "Type" : "String" },
+   	"User" : { "Description" : "Root User",	"Type" : "String" },
+   	"Password" : { "Description" : "Root Password",	"Type" : "String" },
+   	"Database" : { "Description" : "DB Name",	"Type" : "String" },
+   	"SnapshotId" : { "Description" : "Snapshot Id",	"Type" : "String" }
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+	
+    "DBInstance": {
+      	"Type": "TOUGH::RDS::DBInstance",
+      	"Properties": {
+	  		"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" }
+      	}
+    },
+
+    "SnapshotMySQL" : {
+      "Type" : "TOUGH::RDS::SnapshotMySQL",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Fn::GetAtt" : [ "DBInstance", "InstanceId" ] },
+        "User" : { "Ref" : "User" },
+        "Password" : { "Ref" : "Password" },
+        "Database" : { "Ref" : "Database" },
+        "SnapshotId" : { "Ref" : "SnapshotId" },
+        "DBInstance" : { "Ref" : "DBInstance" }
+      }
+    }
+  },
+
+ "Outputs" : {
+ }
+}

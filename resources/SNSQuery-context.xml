@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- ============================== -->
+	<import resource="commonservices-context.xml"/>
+
+	<bean id="SNSQuery"
+		class="com.msi.sns.server.query.SNSService">
+		<constructor-arg>
+			<map>
+				<entry key="AddPermission">
+					<bean class="com.msi.sns.server.query.AddPermission"/>
+				</entry>
+				<entry key="ConfirmSubscription">
+					<bean class="com.msi.sns.server.query.ConfirmSubscription"/>
+				</entry>
+				<entry key="CreateTopic">
+					<bean class="com.msi.sns.server.query.CreateTopic"/>
+				</entry>
+				<entry key="DeleteTopic">
+					<bean class="com.msi.sns.server.query.DeleteTopic"/>
+				</entry>
+				<entry key="GetTopicAttributes">
+					<bean class="com.msi.sns.server.query.GetTopicAttributes"/>
+				</entry>
+				<entry key="ListSubscriptions">
+					<bean class="com.msi.sns.server.query.ListSubscriptions"/>
+				</entry>
+				<entry key="ListSubscriptionsByTopic">
+					<bean class="com.msi.sns.server.query.ListSubscriptionsByTopic"/>
+				</entry>
+				<entry key="ListTopics">
+					<bean class="com.msi.sns.server.query.ListTopics"/>
+				</entry>
+				<entry key="Publish">
+					<bean class="com.msi.sns.server.query.Publish"/>
+				</entry>
+				<entry key="RemovePermission">
+					<bean class="com.msi.sns.server.query.RemovePermission"/>
+				</entry>
+				<entry key="SetTopicAttributes">
+					<bean class="com.msi.sns.server.query.SetTopicAttributes"/>
+				</entry>
+				<entry key="Subscribe">
+					<bean class="com.msi.sns.server.query.Subscribe"/>
+				</entry>
+				<entry key="Unsubscribe">
+					<bean class="com.msi.sns.server.query.Unsubscribe"/>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

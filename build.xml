@@ -1,0 +1,101 @@
+<project name="tough-resources" basedir="." default="main">
+
+    <property name="name" value="tough-resources" />
+    <property file="${user.home}/${name}.properties" />
+    <property file="${user.home}/build.properties" />
+    <property name="config.filename" value="${user.name}.properties" />
+    <property file="${config.filename}" />
+    <property file="build.properties" />
+
+    <property name="project.base.dir" value="." />
+    <property name="environment.dir" value="${project.base.dir}/env" />
+    <property name="resources" value="${project.base.dir}/resources" />
+    <property name="resources.test" value="${project.base.dir}/test/resources" />
+    <property name="build" value="${project.base.dir}/build" />
+    <property name="lib" value="${build}/lib" />
+    <property name="config" value="${build}/config" />
+
+    <available file="${external.env.dir}" type="dir" property="have.ext.env.dir"/>
+    <available file="${external.cloud.config}" type="file" property="have.ext.cloud.config"/>
+
+    <!-- bring in environment properties, for env specific IPs, etc. -->
+    <property name="env" value="dev" />
+
+    <target name="init">
+        <mkdir dir="${build}" />
+        <mkdir dir="${lib}" />
+        <mkdir dir="${config}" />
+    </target>
+
+    <target depends="init" name="zip.lib">
+        <zip destfile="${lib}/${name}.zip">
+            <fileset dir="${project.base.dir}/lib">
+                <include name="*.jar" />
+            </fileset>
+        </zip>
+    </target>
+
+    <target depends="init" name="zip.additional">
+        <zip destfile="${lib}/${name}-additional.zip">
+            <fileset dir="${project.base.dir}/additional">
+                <include name="*.jar" />
+                <exclude name="ant-*.jar" />
+                <include name="maven-*.jar" />
+            </fileset>
+        </zip>
+    </target>
+
+    <target name="use.external.env" depends="init" if="have.ext.env.dir" >
+        <property name="env.properties" value="${external.env.dir}/${env}.properties" />
+        <property file="${env.properties}" />
+    </target>
+
+    <target name="use.env" depends="init, use.external.env" unless="have.ext.env.dir" >
+        <property name="env.properties" value="${environment.dir}/${env}.properties" />
+        <property file="${env.properties}" />
+    </target>
+
+    <target name="external.cloud.config" depends="init" if="have.ext.cloud.config" >
+        <property name="" value="${external.env.dir}/${env}.properties" />
+        <copy todir="${config}" file="${external.cloud.config}" />
+    </target>
+
+    <target name="cloud.config" depends="init, external.cloud.config"
+        unless="have.ext.cloud.config" >
+        <copy todir="${config}">
+            <fileset dir="${environment.dir}">
+                <include name="cloud-config.xml" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="make.config" depends="init, use.env, cloud.config, make.test.config">
+        <copy todir="${config}">
+            <fileset dir="${resources}">
+                <exclude name="db/**" />
+                <exclude name="raw/**" />
+                <exclude name="**/*.nothing" />
+            </fileset>
+        </copy>
+        <zip destfile="${lib}/${name}-config.zip">
+            <fileset dir="${config}">
+            </fileset>
+        </zip>
+    </target>
+
+    <target name="make.test.config" depends="init" unless="skip.test.config">
+        <copy todir="${config}" overwrite="true">
+            <fileset dir="${resources.test}">
+                <exclude name=".nothing" />
+            </fileset>
+            <filterset filtersfile="${env.properties}" onmissingfiltersfile="warn" />
+        </copy>
+    </target>
+
+    <target name="main" depends="zip.lib, make.config, make.test.config, zip.additional">
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+    </target>
+</project>

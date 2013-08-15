@@ -1,0 +1,87 @@
+# Environment settings for local development build/deploy.
+# Please do not modify this file; if you need to change these properties,
+# override in a build.properties; see build.properties.sample for details.
+
+# name/IP of the machine running tests (when dial-back is required).
+tester.host=localhost
+
+# Where to deploy (for deployment from Ant)
+deploy.ip=127.0.0.1
+deploy.host=localhost
+deploy.password=tomcat
+deploy.username=tomcat
+
+# Default zone used for tests (group of settings from cloud-config
+default.availability.zone=cloud-definition-name
+
+# Configure the location of various services (usually the same as deploy.host)
+rds.host=${deploy.host}
+sqs.host=${deploy.host}
+dns.host=${deploy.host}
+internal.service.host=${deploy.host}
+internal.service.ip=${deploy.ip}
+
+# Chef configuration
+# The following settings are required for tests that hit Chef
+# The following requires that deploy.host is registered as a chef client
+chef.env=_default
+CHEF_USER_ID=${deploy.host}
+CHEF_PRIVATE_KEY=/etc/chef/client.pem
+CHEF_API_URL=http://chef.example.com:4000
+CHEF_SERVER=chef.example.com
+CHEF_IP=192.168.1.50
+
+# Test user credentials (this should be valid on the cloud)
+test.accessKey=testuser
+test.secretKey=testuser-password
+
+# Tenant ID (user above should have access to this tenant)
+ec2.owner.id=abcd1234abcd1234abcd1234abcd1234
+
+# For advanced testing, a user that cannot create, for testing quota
+test.limitedQuotaAccessKey=testlimiteduser
+test.limitedQuotaSecretKey=testlimiteduser-password
+test.limitedQuotaZone=cloud-definition-name
+test.limitedQuotaOwnerId=abcd1234abcd1234abcd1234abcd1234
+
+# Another test user (valid on the cloud, not in the DB)
+testuser1.accessKey=testuser1
+testuser1.secretKey=testuser1
+# Another test user (valid on the cloud, not in the DB)
+testuser2.accessKey=testuser2
+testuser2.secretKey=testuser2
+
+# Other credentials for testing (not necessary to be cloud accounts)
+test.sqs.accessKey0=SQS_TEST_ACCESS_KEY_0
+test.sqs.secretKey0=SQS_TEST_SECRET_KEY_0
+
+test.sqs.accessKey1=SQS_TEST_ACCESS_KEY_1
+test.sqs.secretKey1=SQS_TEST_SECRET_KEY_1
+
+test.sqs.accessKey2=SQS_TEST_ACCESS_KEY_2
+test.sqs.secretKey2=SQS_TEST_SECRET_KEY_2
+
+
+# Database connection information
+flyway.user=topstack
+flyway.password=topstack_password
+flyway.driver=com.mysql.jdbc.Driver
+flyway.url=jdbc:mysql://${deploy.ip}:3306/topstack
+db.password=topstack_password
+
+# Base TopStack image, should be installed on the cloud
+base.image.id=abcdef01-2345-6789-abcd-ef0123456789
+
+# Default flavor name, used by tests; should be big enough for base image.
+default.flavor=m1.small
+
+# As far as tests are concerned, this is only for location of ftl files:
+TOUGH_CONFIG_DIR=../TopStackResources/resources
+# Needs a setting
+YUMHOST=
+
+dns.register=false
+topstack.version=2.0.0-rc1
+license=ASLv2
+domain.name=localhost
+install.date=2013-08-15

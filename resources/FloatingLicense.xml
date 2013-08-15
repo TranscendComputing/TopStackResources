@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<License>
+	<Data>
+		<IssuedTo>Transcend Development Team</IssuedTo>
+		<LicenseType>floating</LicenseType>
+		<NumARUM>20</NumARUM>
+		<Validity>2013-12-31</Validity>
+		<Product>
+			<Name>TopStack</Name>
+			<Version>1.0</Version>
+		</Product>
+		<LicenseType>evaluation</LicenseType>
+		<PromotionCode></PromotionCode>
+		<HostName></HostName>
+	</Data>
+</License>

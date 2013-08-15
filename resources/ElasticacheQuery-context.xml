@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- ============================== -->
+	<import resource="commonservices-context.xml" />
+
+	<bean id="elasticacheQuery"
+		class="com.msi.tough.elasticache.query.ElasticacheQueryImpl">
+		<constructor-arg>
+			<map>
+                <entry key="CreateCacheCluster">
+                    <bean class="com.msi.tough.elasticache.query.actions.CreateCacheClusterAction"></bean>
+                </entry>
+                <entry key="DeleteCacheCluster">
+                    <bean class="com.msi.tough.elasticache.query.actions.DeleteCacheClusterAction"></bean>
+                </entry>
+                <entry key="DescribeCacheClusters">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeCacheClustersAction"></bean>
+                </entry>
+                <entry key="ModifyCacheCluster">
+                    <bean class="com.msi.tough.elasticache.query.actions.ModifyCacheClusterAction"></bean>
+                </entry>
+                <entry key="RebootCacheCluster">
+                    <bean class="com.msi.tough.elasticache.query.actions.RebootCacheClusterAction"></bean>
+                </entry>
+                <entry key="CreateCacheSecurityGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.CreateCacheSecurityGroupAction"></bean>
+                </entry>
+                <entry key="DeleteCacheSecurityGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.DeleteCacheSecurityGroupAction"></bean>
+                </entry>
+                <entry key="DescribeCacheSecurityGroups">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeCacheSecurityGroupsAction"></bean>
+                </entry>
+                <entry key="AuthorizeCacheSecurityGroupIngress">
+                    <bean class="com.msi.tough.elasticache.query.actions.AuthorizeCacheSecurityGroupIngressAction"></bean>
+                </entry>
+                <entry key="RevokeCacheSecurityGroupIngress">
+                    <bean class="com.msi.tough.elasticache.query.actions.RevokeCacheSecurityGroupIngressAction"></bean>
+                </entry>
+                <entry key="CreateCacheParameterGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.CreateCacheParameterGroupAction"></bean>
+                </entry>
+                <entry key="DeleteCacheParameterGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.DeleteCacheParameterGroupAction"></bean>
+                </entry>
+                <entry key="DescribeCacheParameterGroups">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeCacheParameterGroupsAction"></bean>
+                </entry>
+                <entry key="DescribeCacheParameters">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeCacheParametersAction"></bean>
+                </entry>
+                <entry key="DescribeEngineDefaultParameters">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeEngineDefaultParametersAction"></bean>
+                </entry>
+                <entry key="ModifyCacheParameterGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.ModifyCacheParameterGroupAction"></bean>
+                </entry>
+                <entry key="ResetCacheParameterGroup">
+                    <bean class="com.msi.tough.elasticache.query.actions.ResetCacheParameterGroupAction"></bean>
+                </entry>
+                <entry key="DescribeEvents">
+                    <bean class="com.msi.tough.elasticache.query.actions.DescribeEventsAction"></bean>
+                </entry>
+                <entry key="ChefNotification">
+                	<bean class="com.msi.tough.elasticache.query.actions.ChefNotificationAction" />
+                </entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

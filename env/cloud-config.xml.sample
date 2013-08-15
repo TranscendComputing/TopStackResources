@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <!-- Reusable URLS -->
+    <bean id="grizzlyServices" class="java.lang.String">
+        <constructor-arg value="http://my-grizzly-host.example.com:5000/v2.0"/>
+    </bean>
+
+    <util:map id="cloud-config">
+
+        <!-- OpenStack Grizzly sample definition -->
+        <entry key="cloud-definition-name">
+            <map>
+                <entry key="AvailabilityZone" value="nova"/>
+                <entry key="CloudType" value="OpenStack"/>
+                <entry key="db.t1.micro" value="1"/>
+                <entry key="db.m1.small" value="2"/>
+                <entry key="db.m1.medium" value="3"/>
+                <entry key="db.m1.large" value="4"/>
+                <entry key="db.m1.xlarge" value="5"/>
+                <entry key="VirtualDisk" value="/dev/vdz"/>
+                <entry key="AllocatePublicIP" value="true"/>
+                <entry key="UseUUID" value="true"/>
+
+                <!-- this image must be build; see install guide -->
+                <entry key="ImageId" value="abcdef01-2345-6789-abcd-ef0123456789"/>
+
+                <entry key="EC2_URL"
+                    value="http://my-grizzly-host.example.com:8773/services/Cloud"/>
+                <entry key="S3_URL" value="http://my-grizzly-host.example.com:8080/v1/AUTH_08ca53e1ab774df09fb3be6d7cca170a"/>
+
+                <!-- This is the instance type used for standard services;
+                     compute cluster, load balancer.  Should be at least 5G
+                     root disk. -->
+                <entry key="InstanceType" value="7"/>
+
+                <entry key="Openstack_API_URL" value="http://my-grizzly-host.example.com:8774/v2"/>
+                <entry key="tokens">
+                    <map>
+                        <entry key="Openstack_API_URL" value="grizzlyServices"/>
+                    </map>
+                </entry>
+
+                <entry key="DSN_ENDPOINT" value-ref="grizzlyServices"/>
+                <entry key="DSN_REGION" value="RegionOne"/>
+                <entry key="DSN_API_VERSION" value="2.0"/>
+                <entry key="DSN_CLOUD_NAME" value="grizzly"/>
+
+                <entry key="EUCA_SERVER"
+                    value="http://my-grizzly-host.example.com:8773/services/Cloud"/>
+                <entry key="S3_SERVER" value="my-grizzly-host.example.com"/>
+                <entry key="S3_SERVER_IP" value="192.168.1.50"/>
+                <entry key="SQS">
+                    <map>
+                        <entry key="InstanceType" value="c1.medium"/>
+                        <entry key="AutoScaleMinSize" value="5"/>
+                        <entry key="AutoScaleMaxSize" value="10"/>
+                    </map>
+                </entry>
+            </map>
+        </entry>
+
+        <!-- AWS Properties (for comparing results with Amazon) -->
+        <entry key="us-east-1a">
+            <map>
+                <entry key="AvailabilityZone" value="us-east-1a"/>
+                <entry key="CloudType" value="AWS"/>
+                <entry key="db.t1.micro" value="1"/>
+                <entry key="db.m1.small" value="2"/>
+                <entry key="db.m1.medium" value="3"/>
+                <entry key="db.m1.large" value="4"/>
+                <entry key="db.m1.xlarge" value="5"/>
+                <entry key="VirtualDisk" value="/dev/vdz"/>
+                <entry key="AllocatePublicIP" value="true"/>
+                <entry key="UseUUID" value="true"/>
+
+                <entry key="ImageId" value="ami-abcd1234"/>
+
+                <entry key="EC2_URL"
+                    value="http://ec2.us-east-1.amazonaws.com/"/>
+                <entry key="S3_URL" value="http://s3.amazonaws.com"/>
+
+                <entry key="InstanceType" value="m1.small"/>
+
+                <entry key="DSN_ENDPOINT" value="http://ec2.us-east-1.amazonaws.com/"/>
+                <entry key="DSN_REGION" value="us-east-1"/>
+                <entry key="DSN_API_VERSION" value="2.0"/>
+                <entry key="DSN_CLOUD_NAME" value="aws"/>
+
+                <entry key="EUCA_SERVER"
+                    value="http://ec2.us-east-1.amazonaws.com/"/>
+                <entry key="S3_SERVER" value=""/>
+                <entry key="S3_SERVER_IP" value=""/>
+                <entry key="SQS">
+                    <map>
+                        <entry key="InstanceType" value="c1.medium"/>
+                        <entry key="AutoScaleMinSize" value="5"/>
+                        <entry key="AutoScaleMaxSize" value="10"/>
+                    </map>
+                </entry>
+            </map>
+        </entry>
+
+        <!-- Modifications typically not required beyond this point, except to
+          -  support a new cloud.
+          -->
+
+        <!-- General properties -->
+        <entry key="cloud.Eucalyptus">
+            <map>
+                <entry key="DSN_PROVIDER_CLASS" value="org.dasein.cloud.aws.AWSCloud"/>
+                <entry key="DSN_CLOUD_PROVIDER" value="Eucalyptus"/>
+            </map>
+        </entry>
+        <entry key="cloud.OpenStack">
+            <map>
+                <entry key="DSN_PROVIDER_CLASS" value="org.dasein.cloud.openstack.nova.os.NovaOpenStack"/>
+                <entry key="DSN_CLOUD_PROVIDER" value="OpenStack"/>
+            </map>
+        </entry>
+        <entry key="cloud.AWS">
+            <map>
+                <entry key="DSN_PROVIDER_CLASS" value="org.dasein.cloud.openstack.nova.os.NovaOpenStack"/>
+                <entry key="DSN_CLOUD_PROVIDER" value="AWS"/>
+            </map>
+        </entry>
+
+    </util:map>
+</beans>

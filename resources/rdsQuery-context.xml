@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    <!-- ============================== -->
+    <import resource="commonservices-context.xml" />
+    <bean id="rdsQueryImpl"
+        class="com.msi.tough.rdsquery.RDSQueryImpl">
+        <constructor-arg>
+            <map>
+                <entry key="AuthorizeDBSecurityGroupIngress">
+                    <bean class="com.msi.tough.rdsquery.actions.AuthorizeDBSecurityGroupIngressAction"></bean>
+                </entry>
+                <entry key="CreateDBInstance">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBInstanceAction"></bean>
+                </entry>
+                <entry key="CreateDBInstanceReadReplica">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBInstanceReadReplicaAction"></bean>
+                </entry>
+                <entry key="CreateDBParameterGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBParameterGroupAction"></bean>
+                </entry>
+                <entry key="CreateDBSecurityGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBSecurityGroupAction"></bean>
+                </entry>
+                <entry key="CreateDBSnapshot">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBSnapshotAction"></bean>
+                </entry>
+                <entry key="DeleteDBInstance">
+                    <bean class="com.msi.tough.rdsquery.actions.DeleteDBInstanceAction"></bean>
+                </entry>
+                <entry key="DeleteDBParameterGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.DeleteDBParameterGroupAction"></bean>
+                </entry>
+                <entry key="DeleteDBSecurityGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.DeleteDBSecurityGroupAction"></bean>
+                </entry>
+                <entry key="DeleteDBSnapshot">
+                    <bean class="com.msi.tough.rdsquery.actions.DeleteDBSnapshotAction"></bean>
+                </entry>
+                <entry key="DescribeDBEngineVersions">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBEngineVersionsAction"></bean>
+                </entry>
+                <entry key="DescribeDBInstances">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBInstancesAction"></bean>
+                </entry>
+                <entry key="DescribeDBParameterGroups">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBParameterGroupsAction"></bean>
+                </entry>
+                <entry key="DescribeDBParameters">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBParametersAction"></bean>
+                </entry>
+                <entry key="DescribeDBSecurityGroups">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBSecurityGroupsAction"></bean>
+                </entry>
+                <entry key="DescribeDBSnapshots">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeDBSnapshotsAction"></bean>
+                </entry>
+                <entry key="DescribeEngineDefaultParameters">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeEngineDefaultParametersAction"></bean>
+                </entry>
+                <entry key="DescribeEvents">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeEventsAction"></bean>
+                </entry>
+                <entry key="DescribeOrderableDBInstanceOptions">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeOrderableDBInstanceOptionsAction"></bean>
+                </entry>
+                <entry key="DescribeReservedDBInstances">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeReservedDBInstancesAction"></bean>
+                </entry>
+                <entry key="DescribeReservedDBInstancesOfferings">
+                    <bean class="com.msi.tough.rdsquery.actions.DescribeReservedDBInstancesOfferingsAction"></bean>
+                </entry>
+                <entry key="ModifyDBInstance">
+                    <bean class="com.msi.tough.rdsquery.actions.ModifyDBInstanceAction"></bean>
+                </entry>
+                <entry key="ModifyDBParameterGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.ModifyDBParameterGroupAction"></bean>
+                </entry>
+                <entry key="PurchaseReservedDBInstancesOffering">
+                    <bean class="com.msi.tough.rdsquery.actions.PurchaseReservedDBInstancesOfferingAction"></bean>
+                </entry>
+                <entry key="RebootDBInstance">
+                    <bean class="com.msi.tough.rdsquery.actions.RebootDBInstanceAction"></bean>
+                </entry>
+                <entry key="ResetDBParameterGroup">
+                    <bean class="com.msi.tough.rdsquery.actions.ResetDBParameterGroupAction"></bean>
+                </entry>
+                <entry key="RestoreDBInstanceFromDBSnapshot">
+                    <bean class="com.msi.tough.rdsquery.actions.RestoreDBInstanceFromDBSnapshotAction"></bean>
+                </entry>
+                <entry key="RestoreDBInstanceToPointInTime">
+                    <bean class="com.msi.tough.rdsquery.actions.RestoreDBInstanceToPointInTimeAction"></bean>
+                </entry>
+                <entry key="RevokeDBSecurityGroupIngress">
+                    <bean class="com.msi.tough.rdsquery.actions.RevokeDBSecurityGroupIngressAction"></bean>
+                </entry>
+                <entry key="SignalCreateDBSnapshot">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBSnapshotAction$SignalCreateDBSnapshot"></bean>
+                </entry>
+                <entry key="MountDBVolume">
+                    <bean class="com.msi.tough.rdsquery.actions.CreateDBInstanceAction$MountDBVolume"></bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+</beans>

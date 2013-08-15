@@ -1,0 +1,48 @@
+{
+  "ToughTemplateFormatVersion" : "2011-09-26",
+  "Description" : "Reboot RDS Oracle instance.",
+
+  "Parameters" : {
+   	"AccountId" : {	"Description" : "Account Id", "Type" : "String" },
+   	"DBInstanceId" : {	"Description" : "DB Instance Id", "Type" : "String" }
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+	
+    "DBInstance": {
+      	"Type": "TOUGH::RDS::DBInstance",
+      	"Properties": {
+	  		"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" }
+      	}
+    },
+
+    "RebootMySQL" : {
+      "Type" : "TOUGH::RDS::RebootOracle",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Fn::GetAtt" : [ "DBInstance", "InstanceId" ] },
+        "DBInstance" : { "Ref" : "DBInstance" }
+      }
+    },
+    
+  	"UpdateDBInstanceStatus" : {
+  		"Type" : "TOUGH::RDS::UpdateDBInstanceStatus",
+  		"Name" : "DBInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+			"Status" : "available"
+  		}
+  	}
+  },
+
+ "Outputs" : {
+ }
+}

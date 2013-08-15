@@ -1,0 +1,62 @@
+{
+	"ToughTemplateFormatVersion" : "2011-03-01",
+	
+	"Description" : "Register instance with Loadbalancer.",
+  
+	"Parameters" : {
+		"AccountId" : {
+			"Description" : "Account Id",
+			"Type" : "String"
+		},
+    	"InstanceId" : {
+			"Description" : "Instance Id",
+			"Type" : "String"
+		},
+		"LoadBalancerName" : {
+			"Description" : "LoadBalancer Name",
+			"Type" : "String"
+		}
+  	},
+
+  	"Resources" : {
+  	    "Account": {
+	      "Type": "TOUGH::AccountBean",
+	      "Properties": {
+	  	  	"AccountId" : { "Ref" : "AccountId" }
+	        }
+	    },
+      
+  	    "TrackInstance" : {
+  	      "Type" : "TOUGH::EUCA::TrackInstance",
+  	      "Name" : "Instance",
+  	      "Properties" : {
+  		  	"Account" : { "Ref" : "Account" },
+			"InstanceId" : { "Ref" : "InstanceId" }
+  	      }
+  	    },
+  	    
+		"ConfigureLoadBalancer" : {
+		  "Type" : "TOUGH::ElasticLoadBalancing::ConfigureLoadBalancer",
+		  "Properties" : {
+  		  	"Account" : { "Ref" : "Account" },
+  			"LoadBalancerName" : { "Ref" : "LoadBalancerName" }
+		  }
+	    },
+	    
+	    "ChangeLoadBalancerStatus" : {
+	      "Type" : "TOUGH::ElasticLoadBalancing::ChangeLoadBalancerStatus",
+	      "Properties" : {
+	  		"AccountId" : { "Ref" : "AccountId" },
+		  	"LoadBalancerName" : { "Ref" : "LoadBalancerName" },
+		  	"Status" : "running"
+	      }
+  		}
+  	},
+
+  	"Outputs" : {
+  		"InstanceId" : {
+  			"Description" : "InstanceId",
+  			"Value" : { "Ref" : "InstanceId" }
+  		}
+  	}
+}

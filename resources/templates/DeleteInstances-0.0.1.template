@@ -1,0 +1,36 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+
+  "Description" : "Delete Instances.",
+  
+	"Parameters" : {
+		"AccountId" : {	"Description" : "Account Id", "Type" : "String"	},
+		"AvailabilityZone" : { "Description" : "AvailabilityZone","Type" : "String" },
+		"Instances" : { "Description" : "Instances","Type" : "List<String>"	}
+	},
+
+	"Resources" : {
+	    "Account": {
+	      "Type": "TOUGH::AccountBean",
+	      "Properties": {
+	  	  	"AccountId" : { "Ref" : "AccountId" }
+	        }
+	    },
+    
+	    "DeleteInstances" : {
+	      "Type" : "TOUGH::EUCA::DeleteInstances",
+	      "Properties" : {
+		  	"Account" : { "Ref" : "Account" },
+		  	"AvailabilityZone" : { "Ref" : "AvailabilityZone" },
+			"Instances" : { "Ref" : "Instances" }
+	      }
+		}
+	},
+
+	"Outputs" : {
+		"Instances" : {
+			"Description" : "Instances",
+			"Value" : { "Ref" : "Instances" }
+		}
+	}
+}

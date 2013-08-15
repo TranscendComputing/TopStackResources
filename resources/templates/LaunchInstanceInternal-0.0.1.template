@@ -1,0 +1,38 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+
+  "Description" : "Launch Instance Internal to Templates.",
+
+  "Parameters" : {
+		"AvailabilityZone" : {
+		  "Description" : "AvaialbilityZone in which an instance should be created",
+		  "Type" : "String"
+		},
+		"AccountId" : {
+		    "Description" : "Account Id",
+		    "Type" : "String"
+		},
+		"LaunchConfig" : {
+		    "Description" : "Launch Configuration",
+		    "Type" : "LaunchConfig"
+		}
+  },
+
+  "Resources" : {
+  		"Account": {
+      		"Type": "TOUGH::AccountBean",
+      		"Properties": {
+	  			"AccountId" : { "Ref" : "AccountId" }
+      		}
+    	},
+    	
+		"TOUGH::Instance" : {
+			"Type" : "TOUGH::EUCA::LaunchInstance",
+			"Properties" : {
+				"Account" : { "Ref" : "Account" },
+				"AvailabilityZone": { "Ref" : "AvailabilityZone" },
+				"LaunchConfig" : { "Ref" : "LaunchConfig" }
+			}
+    	}
+  }
+}

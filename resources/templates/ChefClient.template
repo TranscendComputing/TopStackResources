@@ -1,0 +1,22 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "Create Chef Client",
+  "Parameters" : {
+    "ClientName" : { "Type" : "String" }
+  },
+  
+  "Resources" : {
+    "ChefClient": {
+      "Type" : "TRANSCEND::CHEF::ChefClient",
+      "Properties": {
+        "ClientName" : { "Ref" : "ClientName" }
+      }
+    }
+  }
+  
+  "Outputs" : {
+    "PrivateKey" : { "Fn::GetAtt" : [ "ChefClient", "PrivateKey" ]},
+    "PublicKey" : { "Fn::GetAtt" : [ "ChefClient", "PublicKey" ]}
+  }
+}
+

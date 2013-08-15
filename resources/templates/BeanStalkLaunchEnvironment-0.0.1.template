@@ -1,0 +1,283 @@
+{
+	"ToughTemplateFormatVersion" : "2011-03-01",
+	
+	"Description" : "Launch and configure Bean Stalk instance.",
+  
+	"Parameters" : {
+    	"AccountId" : {
+			"Description" : "Account Id",
+			"Type" : "String"
+		},
+    	"AvailabilityZone" : {
+			"Description" : "Availability Zone",
+			"Type" : "String"
+		},
+		"S3Bucket" : {
+			"Description" : "S3 Bucket",
+			"Type" : "String"
+		},
+		"S3Key" : {
+			"Description" : "S3 Key",
+			"Type" : "String"
+		},
+		"EnvironmentName" : {
+			"Description" : "Environment Name",
+			"Type" : "String"
+		}
+  	},
+
+  	"Resources" : {
+  	    "Account": {
+	      "Type": "TOUGH::AccountBean",
+	      "Properties": {
+		  	"AccountId" : { "Ref" : "AccountId" }
+	      }
+	    },
+	    	  	    
+	    "LoadBalancer" : {
+	      "Type" : "TOUGH::ElasticLoadBalancing::LoadBalancer",
+	      "Properties" : {
+		  	"AccountId" : { "Ref" : "AccountId" },
+	        "AvailabilityZone": { "Ref" : "AvailabilityZone" },
+			"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+	        "Listeners": [
+	          {
+	            "InstancePort": "8080",
+	            "PolicyNames": [ "p1" ],
+	            "Protocol": "HTTP",
+	            "LoadBalancerPort": "80"
+	          }
+	        ],
+	        "LBCookieStickinessPolicy": [ { "CookieExpirationPeriod": "30", "PolicyName": "p1" }]
+	      }
+	    },
+	    
+	    "LoadBalancerLaunchConfig": {
+	      "Type": "TOUGH::LaunchConfiguration",
+	      "Properties": {
+		  	"AccountId" : { "Ref" : "AccountId" },
+	        "SecurityGroups" : { "Fn::GetAtt" : [ "Account", "DefSecurityGroups" ] },
+	        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" } ]},
+	        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+	        "InstanceType" : { "Fn::Configuration" : [ "InstanceType", { "Ref" : "AvailabilityZone" } ]},
+	        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" } ]},
+	        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" } ]}
+	      }
+	    },
+    
+	    "LoadBalancerInstance" : {
+	      "Type" : "TOUGH::EUCA::LaunchInstance",
+	      "Properties" : {
+		  	"Account" : { "Ref" : "Account" },
+	        "AvailabilityZone": { "Ref" : "AvailabilityZone" },
+	    	"LaunchConfig" : { "Ref" : "LoadBalancerLaunchConfig" },
+	        "Setup" : {
+	        }
+	      }
+	    },
+	  	    
+	    "RegisterLoadBalancerInstance" : {
+	      "Type" : "TOUGH::ElasticLoadBalancing::RegisterLoadBalancerInstance",
+	      "Properties" : {
+		  	"AccountId" : { "Ref" : "AccountId" },
+			"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+	        "Instance" : { "Ref" : "LoadBalancerInstance" }
+	      }
+	    },
+	    
+	    "TrackLoadBalancerInstance" : {
+	      "Type" : "TOUGH::EUCA::TrackInstance",
+	      "Name" : "LoadBalancerInstance",
+	      "Properties" : {
+		  	"Account" : { "Ref" : "Account" },
+	        "InstanceId" : { "Fn::GetAtt" : [ "LoadBalancerInstance", "InstanceId" ] }
+	      }
+	    },
+	    
+	    "InstalLoadBalancerSoftware" : {
+	      "Type" : "TOUGH::ElasticLoadBalancing::InstallLoadBalancerSoftware",
+	      "Properties" : {
+		  	"Account" : { "Ref" : "Account" },
+			"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] }
+	      }
+	    },
+	    
+	    "ChangeLoadBalancerStatus" : {
+	      "Type" : "TOUGH::ElasticLoadBalancing::ChangeLoadBalancerStatus",
+	      "Properties" : {
+		  	"AccountId" : { "Ref" : "AccountId" },
+			"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+		  	"Status" : "running"
+	      }
+	    },
+
+  		"AutoScalingLaunchConfig": {
+  			"Type": "TOUGH::LaunchConfiguration",
+  			"Properties": {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"SecurityGroups" : { "Fn::GetAtt" : [ "Account", "DefSecurityGroups" ] },
+		        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" } ]},
+		        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+		        "InstanceType" : { "Fn::Configuration" : [ "InstanceType", { "Ref" : "AvailabilityZone" } ]},
+		        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" } ]},
+		        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" } ]},
+  				"Setup" : {
+  					"TrackInstance" : {
+  						"Type" : "TOUGH::EUCA::TrackInstance",
+  						"Name" : "TOUGH::Instance",
+  						"Properties" : {
+  		  					"Account" : { "Ref" : "Account" },
+  		    				"InstanceId" : { "Fn::GetAtt" : [ "TOUGH::Instance", "InstanceId" ] }
+  		  				}
+  		  			},
+  		  			
+  					"InstallTomcat" : {
+  						"Type" : "TOUGH::ElasticBeanStalk::InstallTomcat",
+  						"Properties" : {
+  		  					"Account" : { "Ref" : "Account" },
+	  		  				"Instance" : { "Ref" : "TOUGH::Instance" },
+					        "URL" : { "Fn::Configuration" : [ "TomcatURL", { "Ref" : "AvailabilityZone" } ]},
+					        "TomcatDirectory" : { "Fn::Configuration" : [ "TomcatDirectory", { "Ref" : "AvailabilityZone" } ]}
+  		         		}
+  					},
+  					
+  					"CopyWARFile" : {
+  						"Type" : "TOUGH::S3::CopyS3Resource",
+  						"Properties" : {
+		  				    "Account" : { "Ref" : "Account" },
+		  				    "Instance" : { "Ref" : "TOUGH::Instance" },
+  							"S3Bucket" : { "Ref" : "S3Bucket" },
+  							"S3Key" : { "Ref" : "S3Key" },
+  							"FileName" : "app.war",
+  							"ToDir" : {
+  								"Fn::Concat" : [
+					        	  { "Fn::Configuration" : [ "TomcatDirectory", { "Ref" : "AvailabilityZone" } ]},
+  								  "/tomcat/webapps"
+  								]
+  							}
+  						}
+  					},
+  		  			
+  					"RestartTomcat" : {
+  						"Type" : "TOUGH::ElasticBeanStalk::RestartTomcat",
+  						"Properties" : {
+  		  					"Account" : { "Ref" : "Account" },
+	  		  				"Instance" : { "Ref" : "TOUGH::Instance" },
+  			        		"TomcatDirectory" : {  
+  			        			"Fn::Concat" : [
+					        	  	{ "Fn::Configuration" : [ "TomcatDirectory", { "Ref" : "AvailabilityZone" } ]},
+  			        		        "/tomcat"
+  			        		    ]
+  			        		}
+  		         		}
+  					},
+  					
+  					"AddInstancesToLoadBalancer" : {
+  						"Type" : "TOUGH::ElasticLoadBalancing::AddInstancesToLoadBalancer",
+  						"Properties" : {
+  		  					"Account" : { "Ref" : "Account" },
+	  		  				"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+  		    				"InstanceId" : { "Fn::GetAtt" : [ "TOUGH::Instance", "InstanceId" ] }
+  						}
+					},
+  	    
+					"ConfigureLoadBalancer" : {
+					  "Type" : "TOUGH::ElasticLoadBalancing::ConfigureLoadBalancer",
+					  "Properties" : {
+			  		  	"Account" : { "Ref" : "Account" },
+  		  				"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] }
+					  }
+				    },
+				    
+				    "ChangeLoadBalancerStatus" : {
+				      "Type" : "TOUGH::ElasticLoadBalancing::ChangeLoadBalancerStatus",
+				      "Properties" : {
+				  		"AccountId" : { "Ref" : "AccountId" },
+  		  				"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+					  	"Status" : "running"
+				      }
+			  		},
+				    
+				    "ChangeEnvironmentStatus" : {
+				      "Type" : "TOUGH::ElasticBeanStalk::ChangeEnvironmentStatus",
+				      "Properties" : {
+				  		"Account" : { "Ref" : "Account" },
+  		  				"EnvironmentName" : { "Ref" : "EnvironmentName" },
+				        "Instance" : { "Ref" : "LoadBalancerInstance" },
+					  	"Status" : "Ready"
+				      }
+			  		}
+  				},
+  				"Shutdown" : {
+  					"DeregisterAutoScalingInstance": {
+	  		  			"Type" : "TOUGH::AutoScaling::DeregisterAutoScalingInstance",
+	  		  			"Properties" : {
+	  		  				"AccountId" : { "Ref" : "AccountId" },
+	  		  				"AutoScalingGroupName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_ASGroup" ] },
+	  		  				"Instance" : { "Ref" : "TOUGH::Instance" }
+	  		  			}
+  					},
+  					
+				    "DeleteInstances" : {
+			      		"Type" : "TOUGH::EUCA::DeleteInstances",
+				      	"Properties" : {
+	  		  				"Account" : { "Ref" : "Account" },
+	  		  				"Instance" : { "Fn::GetAtt" : [ "TOUGH::Instance", "InstanceId" ] }
+				      	}
+					}
+  				}
+			}
+  		},
+    
+  		"RegisterAutoScalingLaunchConfig" : {
+  			"Type" : "TOUGH::AutoScaling::RegisterAutoScalingLaunchConfig",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LaunchConfig" ] },
+  				"LaunchConfig" : { "Ref" : "AutoScalingLaunchConfig" }
+  			}
+  		},
+    
+  		"AutoScalingGroup" : {
+  			"Type" : "TOUGH::AutoScaling::AutoScalingGroup",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_ASGroup" ] },
+  				"LoadBalancerName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LB" ] },
+  				"AvailabilityZone": { "Ref" : "AvailabilityZone" },
+		        "CoolDown" : { "Fn::Configuration" : [ "AutoScaleCoolDown", { "Ref" : "AvailabilityZone" } ]},
+		        "MinSize" : { "Fn::Configuration" : [ "AutoScaleMinSize", { "Ref" : "AvailabilityZone" } ]},
+		        "MaxSize" : { "Fn::Configuration" : [ "AutoScaleMaxSize", { "Ref" : "AvailabilityZone" } ]},
+  				"AutoScalingLaunchConfigName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_LaunchConfig" ] }
+  			}
+  		},
+    
+  		"AutoScalingTrigger" : {
+  			"Type" : "TOUGH::AutoScaling::AutoScalingTrigger",
+  			"Properties" : {
+  				"AccountId" : { "Ref" : "AccountId" },
+  				"Name" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_Trigger" ] },
+  				"AutoScalingGroupName" : { "Fn::Concat" : [ "EBS_", {"Ref" : "EnvironmentName"}, "_ASGroup" ] },
+		        "BreachDuration" : { "Fn::Configuration" : [ "AutoScaleBreachDuration", { "Ref" : "AvailabilityZone" } ]},
+		        "Dimensions" : { "Fn::Configuration" : [ "AutoScaleDimensions", { "Ref" : "AvailabilityZone" } ]},
+		        "LowerBreachIncrement" : { "Fn::Configuration" : [ "AutoScaleLowerBreachIncrement", { "Ref" : "AvailabilityZone" } ]},
+		        "LowerBreachThreshold" : { "Fn::Configuration" : [ "AutoScaleLowerBreachThreshold", { "Ref" : "AvailabilityZone" } ]},
+		        "Measure" : { "Fn::Configuration" : [ "AutoScaleMeasure", { "Ref" : "AvailabilityZone" } ]},
+		        "NameSpace" : { "Fn::Configuration" : [ "AutoScaleNameSpace", { "Ref" : "AvailabilityZone" } ]},
+		        "Period" : { "Fn::Configuration" : [ "AutoScalePeriod", { "Ref" : "AvailabilityZone" } ]},
+		        "Statistic" : { "Fn::Configuration" : [ "AutoScaleStatistic", { "Ref" : "AvailabilityZone" } ]},
+		        "Unit" : { "Fn::Configuration" : [ "AutoScaleUnit", { "Ref" : "AvailabilityZone" } ]},
+		        "UpperBreachIncrement" : { "Fn::Configuration" : [ "AutoScaleUpperBreachIncrement", { "Ref" : "AvailabilityZone" } ]},
+		        "UpperThreshold" : { "Fn::Configuration" : [ "AutoScaleUpperThreshold", { "Ref" : "AvailabilityZone" } ]}
+  			}
+  		}
+  	},
+
+  	"Outputs" : {
+  		"PublicIP" : {
+  			"Description" : "PublicIP address of the LoadBalancer",
+  			"Value" : { "Fn::GetAtt" : [ "LoadBalancerInstance", "PublicIp" ] }
+  		}
+  	}
+}
+

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- ============================== -->
+	<import resource="commonservices-context.xml" />
+
+	<bean id="elasticBeanStalkQuery"
+		class="com.msi.tough.query.elasticbeanstalk.ElasticBeanStalkImpl">
+		<constructor-arg>
+			<map>
+				<entry key="CreateApplication">
+					<bean class="com.msi.tough.query.elasticbeanstalk.CreateApplication">
+					</bean>
+				</entry>
+				<entry key="CreateApplicationVersion">
+					<bean class="com.msi.tough.query.elasticbeanstalk.CreateApplicationVersion">
+					</bean>
+				</entry>
+				<entry key="CreateConfigurationTemplate">
+					<bean class="com.msi.tough.query.elasticbeanstalk.CreateConfigurationTemplate">
+					</bean>
+				</entry>
+				<entry key="CreateEnvironment">
+					<bean class="com.msi.tough.query.elasticbeanstalk.CreateEnvironment">
+					</bean>
+				</entry>
+				<entry key="CreateStorageLocation">
+					<bean class="com.msi.tough.query.elasticbeanstalk.CreateStorageLocation">
+					</bean>
+				</entry>
+				<entry key="DeleteApplication">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DeleteApplication">
+					</bean>
+				</entry>
+				<entry key="DeleteApplicationVersion">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DeleteApplicationVersion">
+					</bean>
+				</entry>
+				<entry key="DeleteConfigurationTemplate">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DeleteConfigurationTemplate">
+					</bean>
+				</entry>
+				<entry key="DeleteEnvironmentConfiguration">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DeleteEnvironmentConfiguration">
+					</bean>
+				</entry>
+				<entry key="DescribeApplications">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DescribeApplications">
+					</bean>
+				</entry>
+				<entry key="DescribeApplicationVersions">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DescribeApplicationVersions">
+					</bean>
+				</entry>
+				<entry key="DescribeConfigurationOptions">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DescribeConfigurationOptions">
+					</bean>
+				</entry>
+				<entry key="DescribeConfigurationSettings">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DescribeConfigurationSettings">
+					</bean>
+				</entry>
+				<entry key="DescribeEnvironments">
+					<bean class="com.msi.tough.query.elasticbeanstalk.DescribeEnvironments">
+					</bean>
+				</entry>
+				<entry key="ListAvailableSolutionStacks">
+					<bean class="com.msi.tough.query.elasticbeanstalk.ListAvailableSolutionStacks">
+					</bean>
+				</entry>
+				<entry key="TerminateEnvironment">
+					<bean class="com.msi.tough.query.elasticbeanstalk.TerminateEnvironment">
+					</bean>
+				</entry>
+				<entry key="UpdateApplication">
+					<bean class="com.msi.tough.query.elasticbeanstalk.UpdateApplication">
+					</bean>
+				</entry>
+				<entry key="UpdateApplicationVersion">
+					<bean class="com.msi.tough.query.elasticbeanstalk.UpdateApplicationVersion">
+					</bean>
+				</entry>
+				<entry key="UpdateConfigurationTemplate">
+					<bean class="com.msi.tough.query.elasticbeanstalk.UpdateConfigurationTemplate">
+					</bean>
+				</entry>
+				<entry key="ValidateConfigurationSettings">
+					<bean class="com.msi.tough.query.elasticbeanstalk.ValidateConfigurationSettings">
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

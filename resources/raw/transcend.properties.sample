@@ -1,0 +1,77 @@
+# This is the configuration file for Transcend Top Stack.
+# All lines that begin with a comment are ignored.
+# Any lines containing values in brackets must have a value set (unless they
+# explicitly don't apply to the cloud).
+# Tomcat should be restarted any time values in this file are changed, using:
+#
+# service tomcat6 restart
+
+# ----------- Cloud environment settings -----------
+
+# The following group of settings define the initial cloud to be managed by
+# TopStack
+
+# User visible name for cloud, can have any normal name value, e.g. Eucalyptus
+availability.zone={availability.zone}
+
+# Type of cloud; possible values: Eucalyptus, OpenStack, HP
+cloud.type={cloud-type}
+
+# Cloud region (OpenStack default is "RegionOne".)
+cloud.region=RegionOne
+
+# Compute service URL (EC2 compatible), e.g. http://euca.example.com:8773/services/Eucalyptus
+cloud.ec2.url={ec2-url}
+
+# Openstack API URL (only relevant for OpenStack), e.g. http://essex.example.com:5000/v2.0
+cloud.openstack.api.url={openstack-api-url}
+
+# Image ID of an image TopStack can spin up for scaling and launched
+# instances (see installation guide for instructions to build a base image.)
+cloud.base.image.id={base-image-id}
+
+# Kernel ID of a kernel usable by the above image
+cloud.base.kernel.id={base-kernel-id}
+
+# Ramdisk ID of a Ramdisk usable by the above image
+cloud.base.ramdisk.id={base-ramdisk-id}
+
+# Instance type to use for launched instances (see installation guide for
+# memory and disk requirements)
+cloud.base.instance.type={base-instance-type}
+
+# Set this to true if TopStack must assign public IPs, false if they're
+# assigned by the cloud automatically.
+cloud.allocate.public.ip={true|false}
+
+# Use UUID to refer to instances, if true.
+cloud.use.uuid={true|false}
+
+# ----------- Settings for relational database service (RDS) -----------
+
+# Choose an instance type to correspond to each DB class; that is, if the API
+# specifies db.m1.small, what size instance should be spun up?
+cloud.instance.db.m1.small={m1.small}
+cloud.instance.db.m1.medium={c1.medium}
+cloud.instance.db.m1.large={m1.large}
+cloud.instance.db.m1.xlarge={c1.xlarge}
+
+# Choose the first available device for cloud volumes; typically /dev/xvdb
+# for Xen hypervisors, or /dev/vdb for KVM (unless more volumes are mounted
+# by default, in which case a larger device letter may be required).
+cloud.virtual.device={could-virtual-device}
+
+# ----------- Settings below this point are typically not modified after installation -----------
+
+# Chef (http://www.opscode.com/chef/) is used by TopStack to configure
+# launched instances.
+# This setting defines Chef environment to be used by TopStack for internal use.
+chef.env=transcend_production
+
+# DB Password (set at install time).
+db.password={db-password}
+
+# Server IP
+
+# DNS53 Metadata registration for TopStack services
+dns.register=true

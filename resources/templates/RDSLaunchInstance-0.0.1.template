@@ -1,0 +1,127 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+  "Description" : "Launch and configure RDS instance.",
+
+  "Parameters" : {
+   	"AccountId" : {	"Description" : "Account Id", "Type" : "String" },
+   	"DBInstanceId" : {	"Description" : "DB Instance Id", "Type" : "String" },
+   	"InstanceType" : {	"Description" : "Instance Type", "Type" : "String" },
+   	"AvailabilityZone" : { "Description" : "Availability Zone",	"Type" : "String" },
+   	"MasterUser" : { "Description" : "Root User",	"Type" : "String" },
+   	"MasterPassword" : { "Description" : "Root Password",	"Type" : "String" },
+   	"SecurityGroups" : { "Description" : "Security Groups",	"Type" : "String" },
+   	"DBName" : { "Description" : "DB Name",	"Type" : "String" }
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+    
+	"LaunchConfig": {
+		"Type": "TOUGH::LaunchConfiguration",
+		"Properties": {
+			"AccountId" : { "Ref" : "AccountId" },
+			"SecurityGroups" : { "Ref" : "SecurityGroups" },
+	        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" } ]},
+	        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+  		  	"InstanceType" : { "Ref" : "InstanceType" },
+	        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" } ]},
+	        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" } ]}
+		}
+	},
+	    
+  	"RDSInstance" : {
+  		"Type" : "TOUGH::EUCA::LaunchInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+  			"AvailabilityZone": { "Ref" : "AvailabilityZone" },
+  			"LaunchConfig" : { "Ref" : "LaunchConfig" }
+  		}
+  	},
+
+	"TrackRDSInstance" : {
+		"Type" : "TOUGH::EUCA::TrackInstance",
+		"Name" : "RDSInstance",
+		"Properties" : {
+	  		"Account" : { "Ref" : "Account" },
+			"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] }
+		}
+	},
+	    
+  	"DBInstance" : {
+  		"Type" : "TOUGH::RDS::UpdateDBInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+			"Instance" : { "Ref" : "RDSInstance" }
+  		}
+  	},
+
+    "InstallMySQL55" : {
+      "Type" : "TOUGH::RDS::InstallMySQL55",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+  		"ServerId" : { "Fn::GetAtt" : [ "DBInstance", "Id" ] },
+		"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+		"DBInstance" : { "Ref" : "DBInstance" }
+      }
+    },
+
+    "MySQLAddReplicateUser" : {
+      "Type" : "TOUGH::RDS::MySQLAddReplicateUser",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+        "RootUser" : "root",
+        "RootPassword" : "",
+        "ReplicateUser" : { "Fn::GetAtt" : [ "DBInstance", "ReplicateUser" ] },
+        "ReplicatePassword" : { "Fn::GetAtt" : [ "DBInstance", "ReplicatePassword" ] }
+      }
+    },
+
+    "MySQLAddUser" : {
+      "Type" : "TOUGH::RDS::MySQLAddUser",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+        "RootUser" : "root",
+        "RootPassword" : "",
+        "NewUser" : { "Ref" : "MasterUser" },
+        "NewPassword" : { "Ref" : "MasterPassword" },
+        "ACL" : ["%"]
+      }
+    },
+
+    "MySQLCreateDB" : {
+      "Type" : "TOUGH::RDS::MySQLCreateDB",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Fn::GetAtt" : [ "RDSInstance", "InstanceId" ] },
+        "User" : { "Ref" : "MasterUser" },
+        "Password" : { "Ref" : "MasterPassword" },
+        "DBName" : { "Ref" : "DBName" }
+      }
+    },
+	    
+  	"UpdateDBInstanceStatus" : {
+  		"Type" : "TOUGH::RDS::UpdateDBInstanceStatus",
+  		"Name" : "DBInstance",
+  		"Properties" : {
+  			"Account" : { "Ref" : "Account" },
+	  		"DBInstanceId" : { "Ref" : "DBInstanceId" },
+			"Status" : "available"
+  		}
+  	}
+  },
+
+ "Outputs" : {
+ 	"PublicIP" : {
+ 		"Description" : "PublicIP address of the LoadBalancer",
+ 		"Value" : { "Fn::GetAtt" : [ "RDSInstance", "PublicIp" ] }
+ 	}
+ }
+}

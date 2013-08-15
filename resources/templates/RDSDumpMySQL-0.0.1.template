@@ -1,0 +1,35 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+  "Description" : "Launch and configure RDS instance.",
+
+  "Parameters" : {
+   	"AccountId" : {	"Description" : "Account Id", "Type" : "String" },
+   	"InstanceId" : {	"Description" : "DB Instance Id", "Type" : "String" },
+   	"User" : { "Description" : "Root User",	"Type" : "String" },
+   	"Password" : { "Description" : "Root Password",	"Type" : "String" },
+   	"Database" : { "Description" : "DB Name",	"Type" : "String" }
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+
+    "DumpMySQL" : {
+      "Type" : "TOUGH::RDS::DumpMySQL",
+      "Properties" : {
+		"Account" : { "Ref" : "Account" },
+		"InstanceId" : { "Ref" : "InstanceId" },
+        "User" : { "Ref" : "User" },
+        "Password" : { "Ref" : "Password" },
+        "Database" : { "Ref" : "Database" }
+      }
+    }
+  },
+
+ "Outputs" : {
+ }
+}

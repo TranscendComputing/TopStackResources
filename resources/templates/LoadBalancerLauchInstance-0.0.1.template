@@ -1,0 +1,86 @@
+{
+  "ToughTemplateFormatVersion" : "2011-03-01",
+
+  "Description" : "Launch Load Balancer instance and install LB software.",
+
+  "Parameters" : {
+    "AvailabilityZone" : { "Description" : "AvaialbilityZone in which an instance should be created", "Type" : "String" },
+    "AccountId" : {"Description" : "Account Id","Type" : "String"},
+    "LoadBalancerName" : {"Description" : "Load Balancer Name","Type" : "String"}
+  },
+
+  "Resources" : {
+    "Account": {
+      "Type": "TOUGH::AccountBean",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" }
+      }
+    },
+    
+    "LoadBalancerLaunchConfig": {
+      "Type": "TOUGH::LaunchConfiguration",
+      "Properties": {
+	  	"AccountId" : { "Ref" : "AccountId" },
+        "SecurityGroups" : { "Fn::GetAtt" : [ "Account", "DefSecurityGroups" ] },
+        "ImageId" : { "Fn::Configuration" : [ "ImageId", { "Ref" : "AvailabilityZone" } ]},
+        "KeyName" : { "Fn::GetAtt" : [ "Account", "DefKeyName" ] },
+        "InstanceType" : { "Fn::Configuration" : [ "InstanceType", { "Ref" : "AvailabilityZone" } ]},
+        "EKI" : { "Fn::Configuration" : [ "EKI", { "Ref" : "AvailabilityZone" } ]},
+        "ERI" : { "Fn::Configuration" : [ "ERI", { "Ref" : "AvailabilityZone" } ]}
+      }
+    },
+    
+    "LoadBalancerInstance" : {
+      "Type" : "TOUGH::EUCA::LaunchInstance",
+      "Properties" : {
+	  	"Account" : { "Ref" : "Account" },
+        "AvailabilityZone": { "Ref" : "AvailabilityZone" },
+    	"LaunchConfig" : { "Ref" : "LoadBalancerLaunchConfig" },
+        "Setup" : {
+        }
+      }
+    },
+    
+    "RegisterLoadBalancerInstance" : {
+      "Type" : "TOUGH::ElasticLoadBalancing::RegisterLoadBalancerInstance",
+      "Properties" : {
+	  	"AccountId" : { "Ref" : "AccountId" },
+	  	"LoadBalancerName" : { "Ref" : "LoadBalancerName" },
+        "Instance" : { "Ref" : "LoadBalancerInstance" }
+      }
+    },
+    
+    "TrackLoadBalancerInstance" : {
+      "Type" : "TOUGH::EUCA::TrackInstance",
+      "Name" : "LoadBalancerInstance",
+      "Properties" : {
+	  	"Account" : { "Ref" : "Account" },
+        "InstanceId" : { "Fn::GetAtt" : [ "LoadBalancerInstance", "InstanceId" ] }
+      }
+    },
+    
+    "InstalLoadBalancerSoftware" : {
+      "Type" : "TOUGH::ElasticLoadBalancing::InstallLoadBalancerSoftware",
+      "Properties" : {
+	  	"Account" : { "Ref" : "Account" },
+	  	"LoadBalancerName" : { "Ref" : "LoadBalancerName" }
+      }
+    },
+    
+    "ChangeLoadBalancerStatus" : {
+      "Type" : "TOUGH::ElasticLoadBalancing::ChangeLoadBalancerStatus",
+      "Properties" : {
+	  	"AccountId" : { "Ref" : "AccountId" },
+	  	"LoadBalancerName" : { "Ref" : "LoadBalancerName" },
+	  	"Status" : "running"
+      }
+    }
+  },
+
+  "Outputs" : {
+    "PublicIP" : {
+      "Description" : "PublicIP address of the LoadBalancer",
+      "Value" : { "Fn::GetAtt" : [ "LoadBalancerInstance", "PublicIp" ] }
+    }
+  }
+}
