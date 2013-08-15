@@ -4,7 +4,7 @@
 
     <property name="project.base.dir" value="."/>
     <property name="dist.suffix" value="" />
-	<property name="toughresources" value="ToughResources${dist.suffix}"/>
+	<property name="toughresources" value="TopStackResources${dist.suffix}"/>
     <property name="toughresources.dir" value="${project.base.dir}/../${toughresources}"/>
     <property name="resources" value="resources"/>
 
@@ -14,8 +14,10 @@
     <!-- if not specified before, assume dev. (won't deploy to a remote instance...-->
     <property name="env" value="dev"/>
 
+    <property name="is.development" value="true"/>
+
     <property name="install.id" value="default" />
-	<property name="toughcore" value="ToughCore${dist.suffix}"/>
+	<property name="toughcore" value="TopStackCore${dist.suffix}"/>
 	<property name="toughcore.dir" value="${project.base.dir}/../${toughcore}"/>
 
     <property name="protobuffers.version" value="2.4.1" />
