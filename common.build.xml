@@ -313,7 +313,7 @@
         depends="use.env, copy-dependencies-hudson, copy-dependencies-dev, copyWebContent, set.jse.classpath, set.jee.classpath, compile.proto">
 
         <property name="myclasspath" refid="project.classpath" />
-        <!-- Emit the property to the ant console -->
+        <!-- Emit the property to the ant console, for debugging -->
         <!-- echo message="Classpath = ${myclasspath}" / -->
 
         <javac debug="on" includeantruntime="false"
@@ -339,7 +339,6 @@
 
 	<path id="test.path">
 		<path refid="project.classpath"/>
-		<!-- This classpath ref should be the class path that is used when compiling the project that imports this-->
         <fileset dir="${toughcore.dir}/build/lib">
              <include name="*-test.jar" />
          </fileset>
@@ -361,6 +360,10 @@
 		<mkdir dir="${test.classes}"/>
 		<unzip dest="${test.classes}" src="${external}/tough-resources-config.zip" />
 		<copy file="${env.properties}" todir="${test.classes}" overwrite="true"/>
+        <property name="myclasspath" refid="test.path" />
+        <!-- Emit the property to the ant console, for debugging -->
+        <!-- echo message="Compile test classpath = ${myclasspath}" / -->
+
 		<javac debug="on" includeantruntime="false"
 		    memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${test.classes}">
 			<src path="${test}" />
