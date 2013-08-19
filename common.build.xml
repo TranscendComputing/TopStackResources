@@ -43,6 +43,14 @@
         <delete dir="${dist}"/>
     </target>
 
+    <!-- Also delete eclipse/maven directories -->
+    <target name="veryclean" unless="skip.clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+        <delete dir="target" include="**/*"/>
+        <delete dir="bin" include="**/*"/>
+    </target>
+
     <!-- ===== Start Maven integration config/targets ===== -->
 
     <path id="maven-ant-tasks.classpath" path="${toughresources.dir}/additional/maven-ant-tasks-2.1.3.jar" />
