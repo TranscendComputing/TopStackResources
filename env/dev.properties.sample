@@ -63,10 +63,12 @@ test.sqs.secretKey2=SQS_TEST_SECRET_KEY_2
 
 
 # Database connection information
-flyway.user=topstack
-flyway.password=topstack_password
+db.user=topstack
+db.password=topstack_password
+flyway.user=${db.user}
+flyway.password=${db.password}
 flyway.driver=com.mysql.jdbc.Driver
-flyway.url=jdbc:mysql://${deploy.ip}:3306/topstack
+flyway.url=jdbc:mysql://${deploy.ip}:3306/${db.user}
 db.password=topstack_password
 
 # Base TopStack image, should be installed on the cloud
