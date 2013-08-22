@@ -14,10 +14,26 @@ deploy.username=tomcat
 # Default zone used for tests (group of settings from cloud-config
 default.availability.zone=cloud-definition-name
 
-# Configure the location of various services (usually the same as deploy.host)
+## Configure the location of various services (usually the same as deploy.host)
+# Compute services
+compute.host=${deploy.host}
+# Scalable Load Balancer services
+slb.host=${deploy.host}
+# Relational Database services
 rds.host=${deploy.host}
+# Simple Queue services
 sqs.host=${deploy.host}
+# DNS 53 service
 dns.host=${deploy.host}
+# Metric Search (CloudWatch) service
+metric.host=${deploy.host}
+# Monitor (CloudWatch aggregation) service
+monitor.host=${deploy.host}
+# Cloud Formation service
+cfs.host=${deploy.host}
+# Elastic App service
+eas.host=${deploy.host}
+# TopStack internal service
 internal.service.host=${deploy.host}
 internal.service.ip=${deploy.ip}
 
