@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
-		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-	<!-- ============================== -->
-	<import resource="commonservices-context.xml" />
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    <!-- ============================== -->
+    <import resource="commonservices-context.xml" />
 
-	<bean id="cloudFormationQuery"
-		class="com.msi.tough.query.cloudformation.CloudFormationQueryImpl">
-		<constructor-arg>
-			<map>
-				<entry key="CreateStack">
-					<bean class="com.msi.tough.query.cloudformation.actions.CreateStack">
-					</bean>
-				</entry>
-				<entry key="DeleteStack">
-					<bean class="com.msi.tough.query.cloudformation.actions.DeleteStack">
-					</bean>
-				</entry>
-				<entry key="DescribeStacks">
-					<bean class="com.msi.tough.query.cloudformation.actions.DescribeStacks">
-					</bean>
-				</entry>
-				<entry key="DescribeStackResource">
-					<bean class="com.msi.tough.query.cloudformation.actions.DescribeStackResource">
-					</bean>
-				</entry>
-				<entry key="DescribeStackResources">
-					<bean class="com.msi.tough.query.cloudformation.actions.DescribeStackResources">
-					</bean>
-				</entry>
-				<entry key="ListStackResources">
-					<bean class="com.msi.tough.query.cloudformation.actions.ListStackResources">
-					</bean>
-				</entry>
-				<entry key="ListStacks">
-					<bean class="com.msi.tough.query.cloudformation.actions.ListStacks">
-					</bean>
-				</entry>
-				<entry key="GetTemplate">
-					<bean class="com.msi.tough.query.cloudformation.actions.GetTemplate">
-					</bean>
-				</entry>
-				<entry key="ValidateTemplate">
-					<bean class="com.msi.tough.query.cloudformation.actions.ValidateTemplate">
-					</bean>
-				</entry>
-			</map>
-		</constructor-arg>
-	</bean>
+    <bean id="cloudFormationQuery"
+        class="com.msi.tough.query.cloudformation.CloudFormationQueryImpl">
+        <constructor-arg>
+            <map>
+                <entry key="CreateStack">
+                    <bean class="com.msi.tough.query.cloudformation.actions.CreateStack">
+                    </bean>
+                </entry>
+                <entry key="DeleteStack">
+                    <bean class="com.msi.tough.query.cloudformation.actions.DeleteStack">
+                    </bean>
+                </entry>
+                <entry key="DescribeStacks">
+                    <bean class="com.msi.tough.query.cloudformation.actions.DescribeStacks">
+                    </bean>
+                </entry>
+                <entry key="DescribeStackResource">
+                    <bean class="com.msi.tough.query.cloudformation.actions.DescribeStackResource">
+                    </bean>
+                </entry>
+                <entry key="DescribeStackResources">
+                    <bean class="com.msi.tough.query.cloudformation.actions.DescribeStackResources">
+                    </bean>
+                </entry>
+                <entry key="ListStackResources">
+                    <bean class="com.msi.tough.query.cloudformation.actions.ListStackResources">
+                    </bean>
+                </entry>
+                <entry key="ListStacks">
+                    <bean class="com.msi.tough.query.cloudformation.actions.ListStacks">
+                    </bean>
+                </entry>
+                <entry key="GetTemplate">
+                    <bean class="com.msi.tough.query.cloudformation.actions.GetTemplate">
+                    </bean>
+                </entry>
+                <entry key="ValidateTemplate">
+                    <bean class="com.msi.tough.query.cloudformation.actions.ValidateTemplate">
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

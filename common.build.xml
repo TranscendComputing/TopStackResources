@@ -4,7 +4,7 @@
 
     <property name="project.base.dir" value="."/>
     <property name="dist.suffix" value="" />
-	<property name="toughresources" value="TopStackResources${dist.suffix}"/>
+    <property name="toughresources" value="TopStackResources${dist.suffix}"/>
     <property name="toughresources.dir" value="${project.base.dir}/../${toughresources}"/>
     <property name="resources" value="resources"/>
 
@@ -17,26 +17,26 @@
     <property name="is.development" value="true"/>
 
     <property name="install.id" value="default" />
-	<property name="toughcore" value="TopStackCore${dist.suffix}"/>
-	<property name="toughcore.dir" value="${project.base.dir}/../${toughcore}"/>
+    <property name="toughcore" value="TopStackCore${dist.suffix}"/>
+    <property name="toughcore.dir" value="${project.base.dir}/../${toughcore}"/>
 
     <property name="protobuffers.version" value="2.4.1" />
     <property name="protobuf.dir" location="${src}/protobuf" />
 
-	<!-- Standard webapp properties. -->
+    <!-- Standard webapp properties. -->
     <property name="external.lib" value="${build}/external/lib"/>
-	<property name="war" value="${build}/war" />
-	<property name="war.classes" value="${war}/WEB-INF/classes" />
-	<property name="warlib" value="${war}/WEB-INF/lib" />
-	<property name="war.meta-inf" value="${war}/META-INF" />
-	<property name="dist" value="${project.base.dir}/dist" />
+    <property name="war" value="${build}/war" />
+    <property name="war.classes" value="${war}/WEB-INF/classes" />
+    <property name="warlib" value="${war}/WEB-INF/lib" />
+    <property name="war.meta-inf" value="${war}/META-INF" />
+    <property name="dist" value="${project.base.dir}/dist" />
 
-	<target name="init">
-		<echo>Initializing: ${name} ${dependency.source}</echo>
-		<mkdir dir="${build}" />
-		<mkdir dir="${lib}" />
-		<mkdir dir="${config}" />
-	</target>
+    <target name="init">
+        <echo>Initializing: ${name} ${dependency.source}</echo>
+        <mkdir dir="${build}" />
+        <mkdir dir="${lib}" />
+        <mkdir dir="${config}" />
+    </target>
 
     <target name="clean" unless="skip.clean">
         <delete dir="${build}"/>
@@ -174,43 +174,43 @@
         </sequential>
     </macrodef>
 
-	<macrodef name="additional-dependencies-dev">
-	    <element name ="dependencies"/>
-	    <sequential>
-	        <copy todir="${external}" file="${toughresources.dir}/build/lib/tough-resources-additional.zip"></copy>
-	        <unzip dest="${external.lib}" src="${external}/tough-resources-additional.zip"></unzip>
-	        <dependencies/>
-	    </sequential>
-	</macrodef>
+    <macrodef name="additional-dependencies-dev">
+        <element name ="dependencies"/>
+        <sequential>
+            <copy todir="${external}" file="${toughresources.dir}/build/lib/tough-resources-additional.zip"></copy>
+            <unzip dest="${external.lib}" src="${external}/tough-resources-additional.zip"></unzip>
+            <dependencies/>
+        </sequential>
+    </macrodef>
 
-	<macrodef name="additional-dependencies-hudson">
-		<attribute name="project.build.number" default="lastSuccessfulBuild"/>
-		<element name ="dependencies"/>
-		<sequential>
-			<get src="http://${hudson.url}/job/${toughresources}/@{project.build.number}/artifact/build/lib/tough-resources-additional.zip"
-				dest="${external}/tough-resources-additional.zip" />
-		    <unzip dest="${external.lib}" src="${external}/tough-resources-additional.zip"></unzip>
-		    <dependencies/>
-		</sequential>
-	</macrodef>
+    <macrodef name="additional-dependencies-hudson">
+        <attribute name="project.build.number" default="lastSuccessfulBuild"/>
+        <element name ="dependencies"/>
+        <sequential>
+            <get src="http://${hudson.url}/job/${toughresources}/@{project.build.number}/artifact/build/lib/tough-resources-additional.zip"
+                dest="${external}/tough-resources-additional.zip" />
+            <unzip dest="${external.lib}" src="${external}/tough-resources-additional.zip"></unzip>
+            <dependencies/>
+        </sequential>
+    </macrodef>
 
-	<target name = "copy-additional-dependencies-dev"
-		depends="init"
-		description="Get the project from local"
-		if="is.development">
-		<additional-dependencies-dev>
-			<dependencies/>
-		</additional-dependencies-dev>
-	</target>
+    <target name = "copy-additional-dependencies-dev"
+        depends="init"
+        description="Get the project from local"
+        if="is.development">
+        <additional-dependencies-dev>
+            <dependencies/>
+        </additional-dependencies-dev>
+    </target>
 
-	<target name = "copy-additional-dependencies-hudson"
-		depends="init"
-		description="Get the project from hudson"
-		unless="is.development">
-		<additional-dependencies-hudson>
-			<dependencies/>
-		</additional-dependencies-hudson>
-	</target>
+    <target name = "copy-additional-dependencies-hudson"
+        depends="init"
+        description="Get the project from hudson"
+        unless="is.development">
+        <additional-dependencies-hudson>
+            <dependencies/>
+        </additional-dependencies-hudson>
+    </target>
 
     <target name="use.external.env" depends="init" if="have.ext.env.dir" >
         <property name="env.properties" value="${external.env.dir}/${env}.properties" />
@@ -333,51 +333,51 @@
 
     <!--Start targets and definitions for testing-->
 
-	<property name="test" value="${project.base.dir}/test" />
-	<property name="test.classes" value="${project.base.dir}/build/test/classes"/>
-	<property name="test.results" value="${project.base.dir}/build/test/results"/>
-	<property name="test.resources" value="${test}/resources"/>
+    <property name="test" value="${project.base.dir}/test" />
+    <property name="test.classes" value="${project.base.dir}/build/test/classes"/>
+    <property name="test.results" value="${project.base.dir}/build/test/results"/>
+    <property name="test.resources" value="${test}/resources"/>
     <property name="test.verbose" value="false"/>
 
 
-	<condition property="test.dir.exists">
-		<available file="${test}/java" type="dir"/>
-	</condition>
+    <condition property="test.dir.exists">
+        <available file="${test}/java" type="dir"/>
+    </condition>
 
 
-	<path id="test.path">
-		<path refid="project.classpath"/>
+    <path id="test.path">
+        <path refid="project.classpath"/>
         <fileset dir="${toughcore.dir}/build/lib">
              <include name="*-test.jar" />
          </fileset>
-		<pathelement location="${test.classes}"/>
-		<pathelement location="${classes}"/>
-		<pathelement location="${test.resources}"/>
+        <pathelement location="${test.classes}"/>
+        <pathelement location="${classes}"/>
+        <pathelement location="${test.resources}"/>
         <pathelement location="${resources}"/>
-	</path>
+    </path>
 
-	<path id="compile.test.path">
-		<path refid="project.classpath"/>
-		<!-- This classpath ref should be the class path that is used when compiling the project that imports this-->
-		<pathelement location="${classes}"/>
-	</path>
+    <path id="compile.test.path">
+        <path refid="project.classpath"/>
+        <!-- This classpath ref should be the class path that is used when compiling the project that imports this-->
+        <pathelement location="${classes}"/>
+    </path>
 
 
-	<target name="compile.test" depends="compile.src" if="test.dir.exists">
-		<delete dir="${test.classes}"/>
-		<mkdir dir="${test.classes}"/>
-		<unzip dest="${test.classes}" src="${external}/tough-resources-config.zip" />
-		<copy file="${env.properties}" todir="${test.classes}" overwrite="true"/>
+    <target name="compile.test" depends="compile.src" if="test.dir.exists">
+        <delete dir="${test.classes}"/>
+        <mkdir dir="${test.classes}"/>
+        <unzip dest="${test.classes}" src="${external}/tough-resources-config.zip" />
+        <copy file="${env.properties}" todir="${test.classes}" overwrite="true"/>
         <property name="myclasspath" refid="test.path" />
         <!-- Emit the property to the ant console, for debugging -->
         <!-- echo message="Compile test classpath = ${myclasspath}" / -->
 
-		<javac debug="on" includeantruntime="false"
-		    memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${test.classes}">
-			<src path="${test}" />
-			<classpath refid="test.path" />
-		</javac>
-	</target>
+        <javac debug="on" includeantruntime="false"
+            memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${test.classes}">
+            <src path="${test}" />
+            <classpath refid="test.path" />
+        </javac>
+    </target>
 
     <target name="ensure.test.name" unless="test">
         <fail message="You must run this target with -Dtestclass=TestName"/>
@@ -399,35 +399,35 @@
         </junit>
     </target>
 
-	<target name="run.test" depends="compile.test, db.migrate.current" if="test.dir.exists" unless="skip.tests">
-		<delete dir="${test.results}/unit"/>
-		<mkdir dir="${test.results}/unit"/>
+    <target name="run.test" depends="compile.test, db.migrate.current" if="test.dir.exists" unless="skip.tests">
+        <delete dir="${test.results}/unit"/>
+        <mkdir dir="${test.results}/unit"/>
 
         <!-- for class path debugging
         <property name="mytestclasspath" refid="test.path" />
         <echo message="Test Classpath = ${mytestclasspath}" />
         -->
 
-		<junit printsummary="yes" haltonfailure="no"
-		    showoutput="${test.verbose}" fork="true">
-		    <!-- for unit test debugging
-		    <jvmarg value="-Xdebug"/>
-		    <jvmarg value="-Xrunjdwp:server=y,transport=dt_socket,address=10007,suspend=y"/>
-		    -->
-		    <sysproperty key="java.library.path" value="${java.library.path}:/usr/local/lib"/>
-			<formatter type="xml"/>
-			<classpath refid="test.path"/>
-			<batchtest fork="yes" todir="${test.results}/unit">
-				<fileset dir="${test.classes}">
-					<include name="**/*Test.class"/>
-					<exclude name="**/integration/**/*.class"/>
-					<exclude name="**/longrunning/**/*.class"/>
-					<exclude name="**/*Abstract*.class"/>
-				    <exclude name="**/*devtests/*.class"/>
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
+        <junit printsummary="yes" haltonfailure="no"
+            showoutput="${test.verbose}" fork="true">
+            <!-- for unit test debugging
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:server=y,transport=dt_socket,address=10007,suspend=y"/>
+            -->
+            <sysproperty key="java.library.path" value="${java.library.path}:/usr/local/lib"/>
+            <formatter type="xml"/>
+            <classpath refid="test.path"/>
+            <batchtest fork="yes" todir="${test.results}/unit">
+                <fileset dir="${test.classes}">
+                    <include name="**/*Test.class"/>
+                    <exclude name="**/integration/**/*.class"/>
+                    <exclude name="**/longrunning/**/*.class"/>
+                    <exclude name="**/*Abstract*.class"/>
+                    <exclude name="**/*devtests/*.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
 
     <target name="run.tests" depends="run.test"/>
 
@@ -466,64 +466,64 @@
         </junit>
     </target>
 
-	<target name="run.integration.tests" depends="compile.test"
-	    if="test.dir.exists" unless="skip.tests">
-		<echo message="Running integration test against ${deploy.ip}"/>
-		<delete dir="${test.results}/*.xml"/>
-		<mkdir dir="${test.results}"/>
+    <target name="run.integration.tests" depends="compile.test"
+        if="test.dir.exists" unless="skip.tests">
+        <echo message="Running integration test against ${deploy.ip}"/>
+        <delete dir="${test.results}/*.xml"/>
+        <mkdir dir="${test.results}"/>
 
-		<junit printsummary="yes" haltonfailure="no" showoutput="${test.verbose}">
+        <junit printsummary="yes" haltonfailure="no" showoutput="${test.verbose}">
             <sysproperty key="java.library.path" value="${java.library.path}:/usr/local/lib"/>
-			<formatter type="xml"/>
-			<classpath refid="test.path"/>
-			<batchtest fork="yes" todir="${test.results}">
-				<fileset dir="${test.classes}">
-					<include name="**/integration/*.class"/>
-					<exclude name="**/longrunning/*.class"/>
-					<exclude name="**/*Abstract*.class"/>
+            <formatter type="xml"/>
+            <classpath refid="test.path"/>
+            <batchtest fork="yes" todir="${test.results}">
+                <fileset dir="${test.classes}">
+                    <include name="**/integration/*.class"/>
+                    <exclude name="**/longrunning/*.class"/>
+                    <exclude name="**/*Abstract*.class"/>
           <exclude name="**/*devtests/*.class"/>
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
 
-	<target name="run.longrunning.integration.tests" depends="compile.test" if="test.dir.exists">
-		<delete dir="${test.results}"/>
-		<mkdir dir="${test.results}"/>
+    <target name="run.longrunning.integration.tests" depends="compile.test" if="test.dir.exists">
+        <delete dir="${test.results}"/>
+        <mkdir dir="${test.results}"/>
 
-		<junit printsummary="yes" haltonfailure="yes" showoutput="${test.verbose}">
-			<formatter type="xml"/>
-			<classpath refid="test.path"/>
-			<batchtest fork="yes" todir="${test.results}">
-				<fileset dir="${test.classes}">
-					<include name="**/integration/*.class"/>
-					<include name="**/longrunning/*.class"/>
-					<exclude name="**/*Abstract*.class"/>
+        <junit printsummary="yes" haltonfailure="yes" showoutput="${test.verbose}">
+            <formatter type="xml"/>
+            <classpath refid="test.path"/>
+            <batchtest fork="yes" todir="${test.results}">
+                <fileset dir="${test.classes}">
+                    <include name="**/integration/*.class"/>
+                    <include name="**/longrunning/*.class"/>
+                    <exclude name="**/*Abstract*.class"/>
           <exclude name="**/*devtests/*.class"/>
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
 
     <macrodef name="run.integration.tests">
-		<attribute name="integration.test.pattern" />
-		<sequential>
-			<delete dir="${test.results}"/>
-			<mkdir dir="${test.results}"/>
+        <attribute name="integration.test.pattern" />
+        <sequential>
+            <delete dir="${test.results}"/>
+            <mkdir dir="${test.results}"/>
 
-			<junit printsummary="yes" haltonfailure="yes">
-				<formatter type="xml"/>
-				<classpath refid="test.path"/>
-				<batchtest fork="yes" todir="${test.results}">
-					<fileset dir="${test.classes}">
-						<include name="@{integration.test.pattern}"/>
-						<exclude name="**/*Abstract*.class"/>
+            <junit printsummary="yes" haltonfailure="yes">
+                <formatter type="xml"/>
+                <classpath refid="test.path"/>
+                <batchtest fork="yes" todir="${test.results}">
+                    <fileset dir="${test.classes}">
+                        <include name="@{integration.test.pattern}"/>
+                        <exclude name="**/*Abstract*.class"/>
           <exclude name="**/*devtests/*.class"/>
-					</fileset>
-				</batchtest>
-			</junit>
-		</sequential>
-	</macrodef>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </sequential>
+    </macrodef>
 
     <target name="run.class" depends="compile.test">
         <echo message="Running a class ${class}"/>
@@ -538,17 +538,17 @@
 
     <!-- ===== Start Web App targets ===== -->
 
-	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${toughresources.dir}/additional/ant-contrib-1.0b3.jar" />
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${toughresources.dir}/additional/ant-contrib-1.0b3.jar" />
 
-	<!--
-	Default tomcat locations.  This will only work on Linux boxes with apt-installations; you will probably need
-	to override in a local build.properties.
-	-->
-	<property name="tomcat.dir" value="/var/lib/tomcat7" />
-	<property name="tomcat.dir.bin" value="/usr/share/tomcat7/bin" />
-	<property name="tomcat.dir.lib" value="/usr/share/tomcat7/lib" />
+    <!--
+    Default tomcat locations.  This will only work on Linux boxes with apt-installations; you will probably need
+    to override in a local build.properties.
+    -->
+    <property name="tomcat.dir" value="/var/lib/tomcat7" />
+    <property name="tomcat.dir.bin" value="/usr/share/tomcat7/bin" />
+    <property name="tomcat.dir.lib" value="/usr/share/tomcat7/lib" />
 
-	<path id="task.path">
+    <path id="task.path">
         <fileset dir="${toughresources.dir}/additional">
             <include name="jul-to-slf4j-*.jar"/>
         </fileset>
@@ -556,20 +556,20 @@
             <include name="commons-logging-*.jar"/>
             <include name="slf4j-api-*.jar"/>
         </fileset>
-		<fileset dir="${tomcat.dir.lib}">
-			<include name="catalina-ant.jar"/>
-			<include name="tomcat-coyote.jar"/>
-			<include name="tomcat-util.jar"/>
-		</fileset>
-		<fileset dir="${tomcat.dir.bin}">
-			<include name="tomcat-juli.jar"/>
-		</fileset>
-	</path>
+        <fileset dir="${tomcat.dir.lib}">
+            <include name="catalina-ant.jar"/>
+            <include name="tomcat-coyote.jar"/>
+            <include name="tomcat-util.jar"/>
+        </fileset>
+        <fileset dir="${tomcat.dir.bin}">
+            <include name="tomcat-juli.jar"/>
+        </fileset>
+    </path>
 
 
-	<taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask" classpathref="task.path"/>
-	<taskdef name="list"      classname="org.apache.catalina.ant.ListTask" classpathref="task.path" />
-	<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask" classpathref="task.path"/>
+    <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask" classpathref="task.path"/>
+    <taskdef name="list"      classname="org.apache.catalina.ant.ListTask" classpathref="task.path" />
+    <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask" classpathref="task.path"/>
 
 
     <target name="deploy.init" description="Prepare to deploy"
@@ -577,189 +577,189 @@
         <property name="deploy.url" value="http://${deploy.ip}:8080/manager/text"/>
     </target>
 
-	<target name="list" description="Reload web application" depends="deploy.init" if="deploy.ip">
-	    <echo>Listing applications as ${deploy.username}, password=${deploy.password}, at ${deploy.url}/text</echo>
-		<list  url="${deploy.url}/text" username="${deploy.username}" password="${deploy.password}" />
-	</target>
+    <target name="list" description="Reload web application" depends="deploy.init" if="deploy.ip">
+        <echo>Listing applications as ${deploy.username}, password=${deploy.password}, at ${deploy.url}/text</echo>
+        <list  url="${deploy.url}/text" username="${deploy.username}" password="${deploy.password}" />
+    </target>
 
-	<target name="deploy" depends="clean, war.all, db.migrate.current, deploy.init" if="deploy.ip"
-	    description="Install application in Tomcat" >
-		<echo message="Deploying ${name} to Tomcat on ${deploy.ip}"/>
-		<subant target="undeploy" failonerror="false" >
-			<fileset dir="." includes="build.xml"/>
-			<property name="path" value="${path}"/>
-			<property name="name" value="${name}"/>
-		</subant>
+    <target name="deploy" depends="clean, war.all, db.migrate.current, deploy.init" if="deploy.ip"
+        description="Install application in Tomcat" >
+        <echo message="Deploying ${name} to Tomcat on ${deploy.ip}"/>
+        <subant target="undeploy" failonerror="false" >
+            <fileset dir="." includes="build.xml"/>
+            <property name="path" value="${path}"/>
+            <property name="name" value="${name}"/>
+        </subant>
 
-		<deploy url="${deploy.url}"
-        	  username="${deploy.username}"
+        <deploy url="${deploy.url}"
+              username="${deploy.username}"
               password="${deploy.password}"
               path="/${name}"
               war="file:${lib}/${name}.war"/>
-	</target>
+    </target>
 
-	<condition property="webcontent.dir.exists">
-		<available file="${WebContent}" type="dir"/>
-	</condition>
+    <condition property="webcontent.dir.exists">
+        <available file="${WebContent}" type="dir"/>
+    </condition>
 
-	<target name="copyWebContent" depends="init,git.revision" if="webcontent.dir.exists">
-		<copy todir="${war}">
-			<fileset dir="${WebContent}"/>
-		</copy>
-		<copy todir="${warlib}">
-			<fileset dir="${external.lib}"/>
-		</copy>
-		<copy todir="${war.classes}" overwrite="true">
-			<filterset>
-			    <!-- jenkins git plugin tags automatically; use manual property for now. -->
-				<filter token="repository.tag" value="${repository.tag}"/>
-				<filter token="repository.branch" value="${repository.branch}"/>
-				<filter token="repository.version" value="${repository.version}"/>
-				<filter token="service.name" value="${name}"/>
+    <target name="copyWebContent" depends="init,git.revision" if="webcontent.dir.exists">
+        <copy todir="${war}">
+            <fileset dir="${WebContent}"/>
+        </copy>
+        <copy todir="${warlib}">
+            <fileset dir="${external.lib}"/>
+        </copy>
+        <copy todir="${war.classes}" overwrite="true">
+            <filterset>
+                <!-- jenkins git plugin tags automatically; use manual property for now. -->
+                <filter token="repository.tag" value="${repository.tag}"/>
+                <filter token="repository.branch" value="${repository.branch}"/>
+                <filter token="repository.version" value="${repository.version}"/>
+                <filter token="service.name" value="${name}"/>
         <filter token="install.id" value="${install.id}" />
         <filter token="scheduler.enabled" value="${scheduler.enabled}"/>
-			</filterset>
+            </filterset>
             <filterset filtersfile="${user.home}/build.properties" onmissingfiltersfile="ignore"/>
             <filterset filtersfile="${env.properties}"/>
-			<fileset dir="${toughresources.dir}/resources/raw">
-				<exclude name="*.sample"/>
-				<exclude name="*.full"/>
-			</fileset>
-		</copy>
-	</target>
+            <fileset dir="${toughresources.dir}/resources/raw">
+                <exclude name="*.sample"/>
+                <exclude name="*.full"/>
+            </fileset>
+        </copy>
+    </target>
 
-	<target name="copy.war.classes">
-		<copy todir="${war.classes}" overwrite="true">
-			<filterset>
-				<filter token="repository.tag" value="${repository.tag}"/>
-				<filter token="repository.branch" value="${repository.branch}"/>
-				<filter token="repository.version" value="${repository.version}"/>
-				<filter token="service.name" value="${name}"/>
-			</filterset>
-			<filterset filtersfile="${user.home}/build.properties"/>
-			<filterset filtersfile="${env.properties}"/>
-			<fileset dir="${toughresources.dir}/resources/raw">
-				<exclude name="*.sample"/>
-			</fileset>
-		</copy>
-	</target>
+    <target name="copy.war.classes">
+        <copy todir="${war.classes}" overwrite="true">
+            <filterset>
+                <filter token="repository.tag" value="${repository.tag}"/>
+                <filter token="repository.branch" value="${repository.branch}"/>
+                <filter token="repository.version" value="${repository.version}"/>
+                <filter token="service.name" value="${name}"/>
+            </filterset>
+            <filterset filtersfile="${user.home}/build.properties"/>
+            <filterset filtersfile="${env.properties}"/>
+            <fileset dir="${toughresources.dir}/resources/raw">
+                <exclude name="*.sample"/>
+            </fileset>
+        </copy>
+    </target>
 
 
-	<target name="war.all" description="no op target placeholder">
-		<echo>Do nothing placeholder.  This should be overriden.</echo>
-	</target>
+    <target name="war.all" description="no op target placeholder">
+        <echo>Do nothing placeholder.  This should be overriden.</echo>
+    </target>
 
-	<target name="copy.config" depends="init">
-		<copy todir="${classes}">
-			<fileset dir="${resources}">
-			</fileset>
-		</copy>
-	</target>
+    <target name="copy.config" depends="init">
+        <copy todir="${classes}">
+            <fileset dir="${resources}">
+            </fileset>
+        </copy>
+    </target>
 
-	<target name="undeploy" depends="deploy.init" if="deploy.ip"
-	    description="Remove application in Tomcat" >
-		<echo message="Un-Deploying ${name} from Tomcat on ${deploy.ip}"/>
-		<undeploy url="${deploy.url}"
-	             username="${deploy.username}"
-	             password="${deploy.password}"
-	             path="/${name}"/>
-	</target>
+    <target name="undeploy" depends="deploy.init" if="deploy.ip"
+        description="Remove application in Tomcat" >
+        <echo message="Un-Deploying ${name} from Tomcat on ${deploy.ip}"/>
+        <undeploy url="${deploy.url}"
+                 username="${deploy.username}"
+                 password="${deploy.password}"
+                 path="/${name}"/>
+    </target>
 
-	<target name="debug.config" description="Emit some configuration information for debugging">
-		<echo message="Tomcat dir: ${tomcat.dir}"/>
-		<echo message="Current environment: ${env}"/>
-	</target>
+    <target name="debug.config" description="Emit some configuration information for debugging">
+        <echo message="Tomcat dir: ${tomcat.dir}"/>
+        <echo message="Current environment: ${env}"/>
+    </target>
 
-	<macrodef name="war.all.generic">
-		<attribute name="dist" default="false" />
-		<attribute name="warfile" default="${lib}/${name}.war" />
-		<element name="war-lib-patterns" optional="true"/>
-	    <element name="war-reinclude-lib-patterns" optional="true"/>
-		<element name="war-classes" optional="true"/>
-		<sequential>
-			<unzip dest="${war.meta-inf}" src="${external}/tough-resources-config.zip" />
-			<if>
-				<equals arg1="@{dist}" arg2="true" />
-				<then>
-					<delete file="${war.classes}/transcend.local.properties"/>
-					<copy todir="${war.meta-inf}" overwrite="true">
-						<fileset dir="${toughresources.dir}/resources/raw" >
-							<include name="cloud-config.xml.sample"/>
-						</fileset>
-						<mapper type="glob" from="*.sample" to="*"/>
-					</copy>
-				</then>
-			</if>
-			<war destfile="@{warfile}" webxml="${WebContent}/WEB-INF/web.xml">
-				<lib dir="${warlib}">
-				    <exclude name="ant-*.jar"/>
-					<exclude name="servlet-api*.jar"/>
-					<exclude name="*-source.jar"/>
-					<exclude name="junit*.jar"/>
-					<exclude name="spring-test-*.jar"/>
-				    <!-- exclude some rarely used jars. -->
-					<exclude name="derby*.jar"/>
-					<!-- exclude name="hazelcast*.jar"/ -->
-					<exclude name="hedwig*.jar"/>
-					<exclude name="bookkeeper*.jar"/>
-					<exclude name="zookeeper*.jar"/>
-				    <!-- exclude shared jars; will be added next, unless this is an dist build. -->
-					<exclude name="EC2*"/>
-					<exclude name="antlr*"/>
-					<exclude name="aop*"/>
-					<exclude name="aws*"/>
-					<exclude name="axis2*"/>
-					<exclude name="axiom*"/>
-					<exclude name="bcprov*"/>
-					<exclude name="freemarker.*"/>
-					<exclude name="hibernate*"/>
-					<exclude name="commons-logging*.jar"/>
-					<exclude name="jta*.jar"/>
-					<exclude name="jackson-*"/>
+    <macrodef name="war.all.generic">
+        <attribute name="dist" default="false" />
+        <attribute name="warfile" default="${lib}/${name}.war" />
+        <element name="war-lib-patterns" optional="true"/>
+        <element name="war-reinclude-lib-patterns" optional="true"/>
+        <element name="war-classes" optional="true"/>
+        <sequential>
+            <unzip dest="${war.meta-inf}" src="${external}/tough-resources-config.zip" />
+            <if>
+                <equals arg1="@{dist}" arg2="true" />
+                <then>
+                    <delete file="${war.classes}/transcend.local.properties"/>
+                    <copy todir="${war.meta-inf}" overwrite="true">
+                        <fileset dir="${toughresources.dir}/resources/raw" >
+                            <include name="cloud-config.xml.sample"/>
+                        </fileset>
+                        <mapper type="glob" from="*.sample" to="*"/>
+                    </copy>
+                </then>
+            </if>
+            <war destfile="@{warfile}" webxml="${WebContent}/WEB-INF/web.xml">
+                <lib dir="${warlib}">
+                    <exclude name="ant-*.jar"/>
+                    <exclude name="servlet-api*.jar"/>
+                    <exclude name="*-source.jar"/>
+                    <exclude name="junit*.jar"/>
+                    <exclude name="spring-test-*.jar"/>
+                    <!-- exclude some rarely used jars. -->
+                    <exclude name="derby*.jar"/>
+                    <!-- exclude name="hazelcast*.jar"/ -->
+                    <exclude name="hedwig*.jar"/>
+                    <exclude name="bookkeeper*.jar"/>
+                    <exclude name="zookeeper*.jar"/>
+                    <!-- exclude shared jars; will be added next, unless this is an dist build. -->
+                    <exclude name="EC2*"/>
+                    <exclude name="antlr*"/>
+                    <exclude name="aop*"/>
+                    <exclude name="aws*"/>
+                    <exclude name="axis2*"/>
+                    <exclude name="axiom*"/>
+                    <exclude name="bcprov*"/>
+                    <exclude name="freemarker.*"/>
+                    <exclude name="hibernate*"/>
+                    <exclude name="commons-logging*.jar"/>
+                    <exclude name="jta*.jar"/>
+                    <exclude name="jackson-*"/>
                     <exclude name="mail-*"/>
-					<exclude name="org.springframework.*"/>
+                    <exclude name="org.springframework.*"/>
                     <exclude name="jersey-*"/>
-				    <!-- include parameter patterns; caller can add back/add more -->
-					<war-lib-patterns/>
-				</lib>
-				<classes dir="${war.meta-inf}">
-					<exclude name="configDB.SQL"/>
-				    <exclude name="log4j.xml"/><!-- use .properties instead.-->
-				</classes>
-				<classes dir="${classes}" excludes="**/Test*.class"/>
-				<war-classes/>
-				<manifest/>
-			</war>
-			<if>
-			    <not>
-					<equals arg1="@{dist}" arg2="true" />
-			    </not>
-				<then>
-					<war destfile="@{warfile}" update="true">
-						<lib dir="${warlib}">
-						    <!-- update to include shared jars; for atomic deployment. -->
-							<include name="EC2*"/>
-							<include name="antlr*"/>
-							<include name="aop*"/>
-							<include name="aws*"/>
-							<include name="axis2*"/>
-							<include name="axiom*"/>
-							<include name="bcprov*"/>
-							<include name="freemarker.*"/>
-							<include name="hibernate*"/>
-							<include name="commons-logging*.jar"/>
-							<include name="jta*.jar"/>
-							<include name="jackson-*"/>
-						    <include name="mail-*"/>
-							<include name="org.springframework.*"/>
-							<include name="jersey-*"/>
-						    <war-reinclude-lib-patterns/>
-						</lib>
-					</war>
-				</then>
-			</if>
-		</sequential>
-	</macrodef>
+                    <!-- include parameter patterns; caller can add back/add more -->
+                    <war-lib-patterns/>
+                </lib>
+                <classes dir="${war.meta-inf}">
+                    <exclude name="configDB.SQL"/>
+                    <exclude name="log4j.xml"/><!-- use .properties instead.-->
+                </classes>
+                <classes dir="${classes}" excludes="**/Test*.class"/>
+                <war-classes/>
+                <manifest/>
+            </war>
+            <if>
+                <not>
+                    <equals arg1="@{dist}" arg2="true" />
+                </not>
+                <then>
+                    <war destfile="@{warfile}" update="true">
+                        <lib dir="${warlib}">
+                            <!-- update to include shared jars; for atomic deployment. -->
+                            <include name="EC2*"/>
+                            <include name="antlr*"/>
+                            <include name="aop*"/>
+                            <include name="aws*"/>
+                            <include name="axis2*"/>
+                            <include name="axiom*"/>
+                            <include name="bcprov*"/>
+                            <include name="freemarker.*"/>
+                            <include name="hibernate*"/>
+                            <include name="commons-logging*.jar"/>
+                            <include name="jta*.jar"/>
+                            <include name="jackson-*"/>
+                            <include name="mail-*"/>
+                            <include name="org.springframework.*"/>
+                            <include name="jersey-*"/>
+                            <war-reinclude-lib-patterns/>
+                        </lib>
+                    </war>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
 
     <macrodef name="war.all.maven">
         <attribute name="dist" default="false" />
@@ -865,161 +865,161 @@
         </sequential>
     </macrodef>
 
-	<target name="dist" depends="compile.src, copy.config, copyWebContent">
-		<mkdir dir="${dist}" />
-		<war.all.generic warfile="${dist}/${name}.war" dist="true">
-			<war-lib-patterns/>
-			<war-classes/>
-		</war.all.generic>
-	</target>
+    <target name="dist" depends="compile.src, copy.config, copyWebContent">
+        <mkdir dir="${dist}" />
+        <war.all.generic warfile="${dist}/${name}.war" dist="true">
+            <war-lib-patterns/>
+            <war-classes/>
+        </war.all.generic>
+    </target>
 
-	<!-- ===== End Web App targets ===== -->
+    <!-- ===== End Web App targets ===== -->
 
-	<!--Java Doc Generation-->
-	<property name="javadoc.dir" value="doc"/>
+    <!--Java Doc Generation-->
+    <property name="javadoc.dir" value="doc"/>
 
-	<path id="javadoc.path">
-		<fileset dir="lib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-		<fileset dir="awslib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		    <exclude name="*javadoc*.jar"/>
-		</fileset>
-		<fileset dir="additional">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-		<fileset dir="../MonitorCommon/lib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-		<fileset dir="../MonitorClient/lib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-		<fileset dir="../Monitor/WebContent/WEB-INF/lib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-		<fileset dir="../GoldenImageService/lib">
-			<include name="*.jar"/>
-			<exclude name="*source*.jar"/>
-		</fileset>
-	</path>
+    <path id="javadoc.path">
+        <fileset dir="lib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+        <fileset dir="awslib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+            <exclude name="*javadoc*.jar"/>
+        </fileset>
+        <fileset dir="additional">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+        <fileset dir="../MonitorCommon/lib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+        <fileset dir="../MonitorClient/lib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+        <fileset dir="../Monitor/WebContent/WEB-INF/lib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+        <fileset dir="../GoldenImageService/lib">
+            <include name="*.jar"/>
+            <exclude name="*source*.jar"/>
+        </fileset>
+    </path>
 
 
 
-	<target name="build.javadoc" description="Generates Javadoc documentation for all projects.">
+    <target name="build.javadoc" description="Generates Javadoc documentation for all projects.">
 
-		<delete dir="${javadoc.dir}"/>
-		<mkdir dir="${javadoc.dir}"/>
+        <delete dir="${javadoc.dir}"/>
+        <mkdir dir="${javadoc.dir}"/>
 
-		<javadoc destdir="${javadoc.dir}" classpathref="javadoc.path">
-			<fileset id="src.dirs" dir="..">
-				<exclude name="CloudFormationQuery/**"/>
-				<exclude name="MonitorClient/**"/>
-				<!--<exclude name="MonitorQuery/**"/>-->
-				<exclude name="MonitorService/**"/>
-				<exclude name="SNSService/**"/>
-				<exclude name="**/test/**"/>
+        <javadoc destdir="${javadoc.dir}" classpathref="javadoc.path">
+            <fileset id="src.dirs" dir="..">
+                <exclude name="CloudFormationQuery/**"/>
+                <exclude name="MonitorClient/**"/>
+                <!--<exclude name="MonitorQuery/**"/>-->
+                <exclude name="MonitorService/**"/>
+                <exclude name="SNSService/**"/>
+                <exclude name="**/test/**"/>
 
-				<include name="**/src/com/msi/**/*.java"/>
+                <include name="**/src/com/msi/**/*.java"/>
 
-				<include name="ASInternal/src/com/amazonaws/**/*.java"/>
-				<include name="RDSQuery/src/com/amazonaws/**/*.java"/>
-				<include name="AutoScaleQuery/src/com/amazonaws/**/*.java"/>
-				<include name="MonitorClient/src/com/amazonaws/**/*.java"/>
-				<include name="MonitorQuery/src/com/amazonaws/**/*.java"/>
-				<include name="CloudFormationQuery/src/com/amazonaws/**/*.java"/>
-				<include name="LoadBalancerQuery/src/com/amazonaws/**/*.java"/>
-				<include name="ElasticBeanStalkQuery/src/com/amazonaws/**/*.java"/>
-				<include name="${toughcore}/src/com/generationjava/**/*.java"/>
-			</fileset>
-		</javadoc>
-	</target>
-	<!--End Java Doc Generation-->
+                <include name="ASInternal/src/com/amazonaws/**/*.java"/>
+                <include name="RDSQuery/src/com/amazonaws/**/*.java"/>
+                <include name="AutoScaleQuery/src/com/amazonaws/**/*.java"/>
+                <include name="MonitorClient/src/com/amazonaws/**/*.java"/>
+                <include name="MonitorQuery/src/com/amazonaws/**/*.java"/>
+                <include name="CloudFormationQuery/src/com/amazonaws/**/*.java"/>
+                <include name="LoadBalancerQuery/src/com/amazonaws/**/*.java"/>
+                <include name="ElasticBeanStalkQuery/src/com/amazonaws/**/*.java"/>
+                <include name="${toughcore}/src/com/generationjava/**/*.java"/>
+            </fileset>
+        </javadoc>
+    </target>
+    <!--End Java Doc Generation-->
 
-	<available file="${project.base.dir}/.git" type="dir" property="git.present"/>
+    <available file="${project.base.dir}/.git" type="dir" property="git.present"/>
 
-	<target name="git.revision" description="Store git revision in ${repository.version}" if="git.present">
-	    <exec executable="git" outputproperty="git.tag" failifexecutionfails="false" errorproperty="">
-	        <arg value="describe"/>
-	        <arg value="--tags"/>
-	        <arg value="--always"/>
-	        <arg value="HEAD"/>
-	    </exec>
-	    <exec executable="git" outputproperty="git.branch" failifexecutionfails="false" errorproperty="">
-	        <arg value="rev-parse"/>
-	        <arg value="--symbolic-full-name"/>
-	        <arg value="--abbrev-ref"/>
-	        <arg value="HEAD"/>
-	    </exec>
-	    <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
-	        <arg value="log"/>
-	        <arg value="-1"/>
-	        <arg value="--pretty=format:%h"/>
-	    </exec>
-	    <condition property="repository.tag" value="${git.tag}" else="unknown">
-	        <and>
-	            <isset property="git.tag"/>
-	            <length string="${git.tag}" trim="yes" length="0" when="greater"/>
-	        </and>
-	    </condition>
-	    <condition property="repository.branch" value="${git.branch}" else="unknown">
-	        <and>
-	            <isset property="git.branch"/>
-	            <length string="${git.branch}" trim="yes" length="0" when="greater"/>
-	        </and>
-	    </condition>
-	    <condition property="repository.version" value="${git.revision}" else="unknown">
-	        <and>
-	            <isset property="git.revision"/>
-	            <length string="${git.revision}" trim="yes" length="0" when="greater"/>
-	        </and>
-	    </condition>
-	    <echo>Detected tag as ${repository.tag}, branch ${repository.branch}, rev ${repository.version}</echo>
-	</target>
+    <target name="git.revision" description="Store git revision in ${repository.version}" if="git.present">
+        <exec executable="git" outputproperty="git.tag" failifexecutionfails="false" errorproperty="">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+            <arg value="--always"/>
+            <arg value="HEAD"/>
+        </exec>
+        <exec executable="git" outputproperty="git.branch" failifexecutionfails="false" errorproperty="">
+            <arg value="rev-parse"/>
+            <arg value="--symbolic-full-name"/>
+            <arg value="--abbrev-ref"/>
+            <arg value="HEAD"/>
+        </exec>
+        <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+            <arg value="log"/>
+            <arg value="-1"/>
+            <arg value="--pretty=format:%h"/>
+        </exec>
+        <condition property="repository.tag" value="${git.tag}" else="unknown">
+            <and>
+                <isset property="git.tag"/>
+                <length string="${git.tag}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+        <condition property="repository.branch" value="${git.branch}" else="unknown">
+            <and>
+                <isset property="git.branch"/>
+                <length string="${git.branch}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+        <condition property="repository.version" value="${git.revision}" else="unknown">
+            <and>
+                <isset property="git.revision"/>
+                <length string="${git.revision}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+        <echo>Detected tag as ${repository.tag}, branch ${repository.branch}, rev ${repository.version}</echo>
+    </target>
 
-	<!--
-	DB Schema population and migration.
-	-->
-	<path id="flyway.lib.path">
-		<!-- include all jars from the Flyway AntLib distribution -->
-		<fileset dir="${toughresources.dir}/flyway">
-			<include name="flyway-*.jar"/>
-		</fileset>
-		<fileset dir="${toughresources.dir}/lib">
+    <!--
+    DB Schema population and migration.
+    -->
+    <path id="flyway.lib.path">
+        <!-- include all jars from the Flyway AntLib distribution -->
+        <fileset dir="${toughresources.dir}/flyway">
+            <include name="flyway-*.jar"/>
+        </fileset>
+        <fileset dir="${toughresources.dir}/lib">
             <include name="aopalliance*.jar"/>
-			<include name="commons-logging-*.jar"/>
+            <include name="commons-logging-*.jar"/>
 
             <include name="org.springframework.beans-*.jar"/>
-			<include name="org.springframework.context-*.jar"/>
-			<include name="org.springframework.core-*.jar"/>
-			<include name="org.springframework.jdbc-*.jar"/>
-			<include name="org.springframework.tx-*.jar"/>
-		</fileset>
-	</path>
+            <include name="org.springframework.context-*.jar"/>
+            <include name="org.springframework.core-*.jar"/>
+            <include name="org.springframework.jdbc-*.jar"/>
+            <include name="org.springframework.tx-*.jar"/>
+        </fileset>
+    </path>
 
-	<path id="flyway.classpath">
-		<!-- include all jars and directories containing jdbc drivers and migrations -->
+    <path id="flyway.classpath">
+        <!-- include all jars and directories containing jdbc drivers and migrations -->
         <fileset refid="topstackcore.deps" />
-		<pathelement location="${toughresources.dir}/${resources}"/>
         <pathelement location="${toughresources.dir}/${resources}"/>
-	</path>
+        <pathelement location="${toughresources.dir}/${resources}"/>
+    </path>
 
     <property name="flyway.locations" value="com.msi.tough.model.migration,db/migrations"/>
 
-	<taskdef uri="antlib:com.googlecode.flyway.ant"
+    <taskdef uri="antlib:com.googlecode.flyway.ant"
              resource="com/googlecode/flyway/ant/antlib.xml"
              classpathref="flyway.lib.path" />
 
-	<target name="db.migrate.status" depends="maven.init">
-		<echo message="Current environment: ${env}"/>
-		<flyway:info/>
-	</target>
+    <target name="db.migrate.status" depends="maven.init">
+        <echo message="Current environment: ${env}"/>
+        <flyway:info/>
+    </target>
 
     <target name="db.migrate.repair" depends="maven.init">
         <echo message="Current environment: ${env}"/>
@@ -1027,23 +1027,23 @@
         <flyway:repair/>
     </target>
 
-	<target name="db.nuke"  depends="maven.init" if="i.am.sure">
-		<echo message="Destroying current database..."/>
-		<flyway:clean />
-	</target>
+    <target name="db.nuke"  depends="maven.init" if="i.am.sure">
+        <echo message="Destroying current database..."/>
+        <flyway:clean />
+    </target>
 
 
-	<target name="db.migrate.current" depends="maven.init" unless="no.db">
-		<property name="flyway.validateOnMigrate" value="false"/>
-		<property name="flyway.disableInitCheck" value="true"/>
-		<echo message="Migrating database at ${flyway.url}"/>
-		<flyway:migrate>
-			<placeholders>
-				<placeholder name="default.availability.zone" value="${default.availability.zone}"/>
-			</placeholders>
-		</flyway:migrate>
-	</target>
+    <target name="db.migrate.current" depends="maven.init" unless="no.db">
+        <property name="flyway.validateOnMigrate" value="false"/>
+        <property name="flyway.disableInitCheck" value="true"/>
+        <echo message="Migrating database at ${flyway.url}"/>
+        <flyway:migrate>
+            <placeholders>
+                <placeholder name="default.availability.zone" value="${default.availability.zone}"/>
+            </placeholders>
+        </flyway:migrate>
+    </target>
 
-	<!-- End DB Schema Migration -->
+    <!-- End DB Schema Migration -->
 
 </project>
