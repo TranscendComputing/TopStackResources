@@ -15,7 +15,7 @@
   "cat > /etc/chef/client.rb << EOC\n",
   "log_level          :info\n",
   "log_location       STDOUT\n",
-  "chef_server_url \"${configuration("CHEF_SERVER", "${AvailabilityZone}")}\"\n",
+  "chef_server_url \"${configuration("CHEF_API_URL", "${AvailabilityZone}")}\"\n",
   "environment \"${configuration("CHEF_ENV", "${AvailabilityZone}")}\"\n",
   "file_cache_path    \"/var/cache/chef\"\n",
   "file_backup_path   \"/var/lib/chef/backup\"\n",
