@@ -10,12 +10,12 @@
   "${configuration("CHEF_IP", "${AvailabilityZone}")} ${configuration("CHEF_SERVER", "${AvailabilityZone}")}\n",
   "${configuration("CHEF_IP", "${AvailabilityZone}")} transcendmonitorhost\n",
   "${configuration("INTERNAL_SERVICE_IP", "${AvailabilityZone}")} ${configuration("INTERNAL_SERVICE_HOST", "${AvailabilityZone}")}\n",
-  
+
   "EOC\n",
   "cat > /etc/chef/client.rb << EOC\n",
   "log_level          :info\n",
   "log_location       STDOUT\n",
-  "chef_server_url \"http://${configuration("CHEF_SERVER", "${AvailabilityZone}")}:4000\"\n",
+  "chef_server_url \"${configuration("CHEF_API_URL", "${AvailabilityZone}")}\"\n",
   "environment \"${configuration("CHEF_ENV", "${AvailabilityZone}")}\"\n",
   "file_cache_path    \"/var/cache/chef\"\n",
   "file_backup_path   \"/var/lib/chef/backup\"\n",
@@ -32,7 +32,7 @@
   "' ",
   "${configuration("TRANSCEND_URL", "${AvailabilityZone}")}",
   "\n",
-  "INST=`curl -m 10 -s http://169.254.169.254/latest/meta-data/instance-id`",
+  "INST=`curl -m 60 -s http://169.254.169.254/latest/meta-data/instance-id`",
   "\n",
   "curl -m 60 -s -d \"",
   "Action=RegisterInstance",

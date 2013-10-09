@@ -25,7 +25,7 @@
           "log_level :info",
           "log_location STDOUT",
 		  "ssl_verify_mode :verify_none",
-		  "chef_server_url \"http://$2:4000\"",
+		  "chef_server_url \"https://$2\"",
 		  "file_cache_path  \"/var/cache/chef\"",
 		  "pid_file \"/var/run/chef/client.pid\"",
 		  "cache_options({ :path => \"/var/cache/chef/checksums\", :skip_expires => true})",

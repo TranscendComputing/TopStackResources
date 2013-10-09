@@ -10,8 +10,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/aspectjweaver.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mule-module-protobuf-1.0-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mule-module-protobuf-1.0-SNAPSHOT.jar" sourcepath="/home/radamhenderson/protobuff/mule-module-protobuf/mule-module-protobuf-1.0-SNAPSHOT-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/mule-transport-zmq-1.2-SNAPSHOT-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/mule-transport-zmq-1.2-SNAPSHOT.jar" sourcepath="lib/mule-transport-zmq-1.2-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/zmq.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
