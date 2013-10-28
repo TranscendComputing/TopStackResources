@@ -43,7 +43,7 @@ internal.service.ip=${deploy.ip}
 chef.env=_default
 CHEF_USER_ID=${deploy.host}
 CHEF_PRIVATE_KEY=/etc/chef/client.pem
-CHEF_API_URL=http://chef.example.com:4000
+CHEF_API_URL=https://chef.example.com
 CHEF_SERVER=chef.example.com
 CHEF_IP=192.168.1.50
 
