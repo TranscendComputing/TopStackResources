@@ -42,6 +42,9 @@
                 <exclude name="ant-*.jar" />
                 <include name="maven-*.jar" />
             </fileset>
+			<fileset dir="${project.base.dir}/memcached">
+				<include name="*.jar" />
+			</fileset>
         </zip>
     </target>
 
