@@ -225,10 +225,12 @@
 
     <target name="use.external.key" depends="init" if="have.ext.key.dir" >
         <property name="env.keys.dir" value="${external.key.dir}" />
+        <property file="${env.keys.dir}" />
     </target>
 
     <target name="use.key" depends="init, use.external.key" unless="have.ext.key.dir" >
 	<property name="env.keys.dir" value="${environment.dir}/../keys" />
+        <property file="${env.keys.dir}" />
     </target>
 
 
