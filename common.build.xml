@@ -9,6 +9,7 @@
     <property name="resources" value="resources"/>
 
     <available file="${external.env.dir}" type="dir" property="have.ext.env.dir"/>
+    <available file="${external.key.dir}" type="dir" property="have.ext.key.dir"/>
     <available file="${external.cloud.config}" type="file" property="have.ext.cloud.config"/>
 
     <!-- if not specified before, assume dev. (won't deploy to a remote instance...-->
@@ -220,6 +221,16 @@
     <target name="use.env" depends="init, use.external.env" unless="have.ext.env.dir" >
         <property name="env.properties" value="${environment.dir}/${env}.properties" />
         <property file="${env.properties}" />
+    </target>
+
+    <target name="use.external.key" depends="init" if="have.ext.key.dir" >
+        <property name="env.keys.dir" value="${external.key.dir}" />
+        <property file="${env.keys.dir}" />
+    </target>
+
+    <target name="use.key" depends="init, use.external.key" unless="have.ext.key.dir" >
+	<property name="env.keys.dir" value="${environment.dir}/../keys" />
+        <property file="${env.keys.dir}" />
     </target>
 
 
