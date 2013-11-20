@@ -1,8 +1,10 @@
+ALTER TABLE `topstack`.`rds_dbengine` MODIFY COLUMN `engine_version` VARCHAR(16)
+
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '10.50.2789.0.v1', 'sqlserver-ee-10.5', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '11.00.2100.60.v1', 'sqlserver-ee-11', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '10.50.2789.0.v1', 'sqlserver-se-10.5', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '11.00.2100.60.v1', 'sqlserver-se-11', false);
-INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '10.5', 'sqlserver-ex-10.5', false);
+INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '10.50.2789.0.v1', 'sqlserver-ex-10.5', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '11.00.2100.60.v1', 'sqlserver-ex-11', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '10.50.2789.0.v1', 'sqlserver-web-10.5', false);
 -- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '11.00.2100.60.v1', 'sqlserver-web-11', false);
