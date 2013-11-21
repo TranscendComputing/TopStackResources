@@ -1,23 +1,23 @@
-ALTER TABLE `msi`.`rds_dbengine` MODIFY COLUMN `engine_version` VARCHAR(16)
+ALTER TABLE `rds_dbengine` MODIFY COLUMN `engine_version` VARCHAR(16)
 
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '10.50.2789.0.v1', 'sqlserver-ee-10.5', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '11.00.2100.60.v1', 'sqlserver-ee-11', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '10.50.2789.0.v1', 'sqlserver-se-10.5', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '11.00.2100.60.v1', 'sqlserver-se-11', false);
-INSERT into msi.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '10.50.2789.0.v1', 'sqlserver-ex-10.5', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '11.00.2100.60.v1', 'sqlserver-ex-11', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '10.50.2789.0.v1', 'sqlserver-web-10.5', false);
--- INSERT into topstack.rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '11.00.2100.60.v1', 'sqlserver-web-11', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '10.50.2789.0.v1', 'sqlserver-ee-10.5', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ee', '11.00.2100.60.v1', 'sqlserver-ee-11', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '10.50.2789.0.v1', 'sqlserver-se-10.5', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-se', '11.00.2100.60.v1', 'sqlserver-se-11', false);
+INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '10.50.2789.0.v1', 'sqlserver-ex-10.5', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-ex', '11.00.2100.60.v1', 'sqlserver-ex-11', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '10.50.2789.0.v1', 'sqlserver-web-10.5', false);
+-- INSERT into rds_dbengine (`engine`, `engine_version`, `dbparameterGroupFamily`, `_default`) values ('sqlserver-web', '11.00.2100.60.v1', 'sqlserver-web-11', false);
 
 
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ee-10.5', 1, 'sqlserver-ee-10.5', 'Default parameter group for sqlserver-ee-10.5');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ee-11', 1, 'sqlserver-ee-11', 'Default parameter group for sqlserver-ee-11');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-se-10.5', 1, 'sqlserver-se-10.5', 'Default parameter group for sqlserver-se-10.5');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-se-11', 1, 'sqlserver-se-11', 'Default parameter group for sqlserver-se-11');
-INSERT INTO msi.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ex-10.5', 1, 'sqlserver-ex-10.5', 'Default parameter group for sqlserver-ex-10.5');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ex-11', 1, 'sqlserver-ex-11', 'Default parameter group for sqlserver-ex-11');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-web-10.5', 1, 'sqlserver-web-10.5', 'Default parameter group for sqlserver-web-10.5');
--- INSERT INTO topstack.rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-web-11', 1, 'sqlserver-web-11', 'Default parameter group for sqlserver-web-11');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ee-10.5', 1, 'sqlserver-ee-10.5', 'Default parameter group for sqlserver-ee-10.5');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ee-11', 1, 'sqlserver-ee-11', 'Default parameter group for sqlserver-ee-11');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-se-10.5', 1, 'sqlserver-se-10.5', 'Default parameter group for sqlserver-se-10.5');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-se-11', 1, 'sqlserver-se-11', 'Default parameter group for sqlserver-se-11');
+INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ex-10.5', 1, 'sqlserver-ex-10.5', 'Default parameter group for sqlserver-ex-10.5');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-ex-11', 1, 'sqlserver-ex-11', 'Default parameter group for sqlserver-ex-11');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-web-10.5', 1, 'sqlserver-web-10.5', 'Default parameter group for sqlserver-web-10.5');
+-- INSERT INTO rds_dbparameter_group (`dbparameterGroupName`, `account_id`, `dbparameterGroupFamily`, `description` ) values ( 'default.sqlserver-web-11', 1, 'sqlserver-web-11', 'Default parameter group for sqlserver-web-11');
 
 
 INSERT INTO rds_parameter (rds_parameter_group_id, apply_type, parameter_name, parameter_value, description, source, data_type, allowed_values, is_modifiable, minimum_engine_version) VALUES ((select rds_parameter_group_id from rds_dbparameter_group where dbparameterGroupName = "default.sqlserver-ex-10.5"), "dynamic", "1204", "0", "Returns the resources and types of locks participating in a deadlock and also the current command affected.", "engine-default", "integer", "0,1", 1, NULL);
